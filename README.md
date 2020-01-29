@@ -5,6 +5,7 @@ Cross platform patient portal for UK-based general practitioners
 Final year project for university
 
 ## Signing key
+```
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQENBF4w7LkBCAC6i0gB5+S7GV+q+wQz0pfWjqOG2GzDRsMzyz+PqDKy9N7QeUqe
@@ -44,3 +45,4 @@ iuslA77cTgoQdLTrn30sVCSx0vRsk6/RHSMl1kRdhscVTqpY3DwC9Ax6+/EiO2rb
 ongt8hctEoA=
 =qn9C
 -----END PGP PUBLIC KEY BLOCK-----
+```
