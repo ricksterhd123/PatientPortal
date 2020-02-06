@@ -1,1 +1,7 @@
-[1, 2, 3].map((n) => n + 1);
+function showWelcome() {
+    const element = <Welcome name='Ricky'/>;
+    ReactDOM.render(element, document.getElementById('root'));
+}
+
+showWelcome();
+console.log("test");
