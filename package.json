@@ -4,7 +4,7 @@
   "description": "Patient portal webserver",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "babel views/scripts -d public/scripts && node server.js",
     "test": "mocha"
   },
   "repository": {
@@ -20,5 +20,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "mocha": "^7.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4"
   }
 }
