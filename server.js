@@ -5,7 +5,7 @@ index.js
 const DEBUG = process.env.DEBUG || false;
 const express = require('express');
 const app = express();
-const port = DEBUG ? 5000 : 80;
+const port = DEBUG ? 5000 : process.env.PORT || 80;
 
 // Static files inside /public folder
 app.use(express.static('public'));
