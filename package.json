@@ -4,7 +4,7 @@
   "description": "Patient portal webserver",
   "main": "server.js",
   "scripts": {
-    "start": "babel views/scripts -d public/scripts && node server.js",
+    "start": "npm install && babel views/scripts -d public/scripts && node server.js",
     "test": "mocha"
   },
   "repository": {
