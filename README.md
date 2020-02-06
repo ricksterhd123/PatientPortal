@@ -2,7 +2,10 @@
 Cross platform patient portal for UK-based general practitioners
 
 ## Background
-Final year project for university
+Patients at Nuffield healthcare center do not have online access to book, cancel, or reschedule appointments nor can they easily order prescriptions or look at past diagnoses and treatments, check their attendance and ask simple questions about their health.
+
+## Aims and objectives
+The software development of a web-based patient portal available to registered patients. The main objectives of this software is to provide the patient with the ability to book, reschedule or cancel appointments, view and order prescriptions, check the history of past diagnosis and any treatment received, be reminded to attend appointments via email or notifications and ask their GP's simple questions about their health. The software system will also provide clinicians an online platform to help their patients directly by answering the questions they ask, and having a schedule of booked appointments with the ability to report absences and reschedule patient’s around if they are unavailable. Administrators will be able to register clinicians, delete patients, clinicians, and delete patient data and or clinician data when requested directly.
 
 ## Signing key
 ```

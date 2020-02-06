@@ -1,0 +1,22 @@
+{
+  "name": "patientportal",
+  "version": "1.0.0",
+  "description": "Patient portal webserver",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricksterhd123/PatientPortal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ricksterhd123/PatientPortal/issues"
+  },
+  "homepage": "https://github.com/ricksterhd123/PatientPortal#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
