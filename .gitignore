@@ -105,3 +105,11 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+# not sure yet
+.idea/
+
+# compiled from babeljs
+public/scripts
+
+data/
