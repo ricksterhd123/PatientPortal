@@ -30,6 +30,9 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const fs = require('fs');
+const key = fs.readFileSync('./localhost-key.pem');
+const cert = fs.readFileSync('./localhost.pem');
 
 app.set('views', __dirname + '/views');
 app.engine('html', engines.htmling);
@@ -48,6 +51,7 @@ app.get('/symptoms', (req, res) => res.render("symptoms.html"));
 app.get('/settings', (req, res) => res.render('settings.html'))
 
 app.get('/login', (req, res) => res.redirect("/home"));
+app.get('/logout', (req, res) => res.redirect('/'));
 
 // Setup server
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

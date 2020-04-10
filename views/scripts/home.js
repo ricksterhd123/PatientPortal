@@ -8,7 +8,7 @@ class IndexNavigation extends React.Component {
                 <a id="symptoms" className="big-button" href="https://www.google.com/">Symptom search</a>
                 <a id="settings" className="big-button" href="/settings">Settings</a>
             </div>
-            <button id="logout">Logout</button>
+            <a id="logout" href="/logout">Logout</a>
         </div>
     }
 }
