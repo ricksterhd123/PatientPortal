@@ -113,3 +113,5 @@ dist
 public/scripts
 
 data/
+
+package-lock.json
