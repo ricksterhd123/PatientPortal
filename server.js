@@ -25,16 +25,15 @@ index.js
 //   client.close();
 // });
 
-let engines = require('consolidate');
+const engines = require('consolidate');
 const express = require('express');
 const app = express();
 const port = process.env.PORT;
-
 const fs = require('fs');
 const key = fs.readFileSync('./localhost-key.pem');
 const cert = fs.readFileSync('./localhost.pem');
-
-const { auth } = require("express-openid-connect");
+const {auth} = require('express-openid-connect');
+const routes = require('./routes.js');
 
 // Auth0 config
 // TODO: setup additional fields during registration (?)
@@ -48,35 +47,25 @@ const config = {
     appSessionSecret: "a long, randomly-generated string stored in env"
   };
 
-// auth router attaches /login, /logout, and /callback routes to the baseURL
+// auth0 router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
+
+// Setup htmling template engine
 app.set('views', __dirname + '/views');
 app.engine('html', engines.htmling);
 app.set('view engine', 'html');
-// Static files inside /public folder
+
+// Serve static files in /public
 app.use(express.static('public'));
 
-// req.isAuthenticated is provided from the auth router
-app.get("/", (req, res) => {
-  let loggedIn = req.isAuthenticated();
-  if (loggedIn)
-  {
-    console.log(req);
-    res.render("home.html", {name: req.openid.user.name || "undefined"});
-  } else {
-    res.redirect("/login");
-  }
-});
-
 // Routes
-// Index /GET
-//app.get('/', (req, res) => res.render('index.html'));
-app.get('/home', (req, res) => res.render('home.html', req.openid.user.name || "undefined"));
-app.get('/appointments', (req, res) => res.render('appointments.html'));
-app.get('/contact', (req, res) => res.render('contact.html'));
-app.get('/symptoms', (req, res) => res.render("symptoms.html"));
-app.get('/settings', (req, res) => res.render('settings.html'));
-app.get("/callback", (req, res) => { console.log(req); res.redirect("/home"); });
+app.get("/", routes.index);
+app.get('/home', routes.home);
+app.get('/appointments', routes.appointments);
+app.get('/contact',  routes.contact );
+app.get('/symptoms', routes.symptoms);
+app.get('/settings', routes.settings);
+app.get("/callback", routes.callback);
 
 // Setup server
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
