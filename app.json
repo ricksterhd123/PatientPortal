@@ -1,7 +1,0 @@
-{
-  "name": "PatientPortal",
-  "description": "Nuffield patient portal by up864163",
-  "repository": "https://github.com/ricksterhd123/patientportal",
-  "keywords": ["node", "express", "heroku"],
-  "image": "heroku/nodejs"
-}
