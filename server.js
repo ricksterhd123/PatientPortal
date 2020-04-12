@@ -28,7 +28,7 @@ index.js
 let engines = require('consolidate');
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 const fs = require('fs');
 const key = fs.readFileSync('./localhost-key.pem');
@@ -36,10 +36,13 @@ const cert = fs.readFileSync('./localhost.pem');
 
 const { auth } = require("express-openid-connect");
 
+// Auth0 config
+// TODO: setup additional fields during registration (?)
+
 const config = {
     required: false,
     auth0Logout: true,
-    baseURL: "https://localhost:3000",
+    baseURL: "http://localhost:3000",
     issuerBaseURL: "https://dev-088ewgr5.eu.auth0.com",
     clientID: "3z4bJHQa2RdlzUn4P9JVrCTCOpRI06kU",
     appSessionSecret: "a long, randomly-generated string stored in env"
@@ -55,21 +58,25 @@ app.use(express.static('public'));
 
 // req.isAuthenticated is provided from the auth router
 app.get("/", (req, res) => {
-  res.send(req.isAuthenticated() ? "Logged in" : "Logged out");
+  let loggedIn = req.isAuthenticated();
+  if (loggedIn)
+  {
+    console.log(req);
+    res.render("home.html", {name: req.openid.user.name || "undefined"});
+  } else {
+    res.redirect("/login");
+  }
 });
-
-
-
-
 
 // Routes
 // Index /GET
 //app.get('/', (req, res) => res.render('index.html'));
-app.get('/home', (req, res) => res.render('home.html'));
+app.get('/home', (req, res) => res.render('home.html', req.openid.user.name || "undefined"));
 app.get('/appointments', (req, res) => res.render('appointments.html'));
 app.get('/contact', (req, res) => res.render('contact.html'));
 app.get('/symptoms', (req, res) => res.render("symptoms.html"));
-app.get('/settings', (req, res) => res.render('settings.html'))
+app.get('/settings', (req, res) => res.render('settings.html'));
+app.get("/callback", (req, res) => { console.log(req); res.redirect("/home"); });
 
 // Setup server
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
