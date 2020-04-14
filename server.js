@@ -3,27 +3,6 @@ index.js
 864163
 */
 
-// const MongoClient = require('mongodb').MongoClient;
-// const assert = require('assert');
-
-// // Connection URL
-// const url = 'mongodb://mongo:27017';
-
-// // Database Name
-// const dbName = 'myproject';
-
-// // Create a new MongoClient
-// const client = new MongoClient(url);
-
-// // Use connect method to connect to the Server
-// client.connect(function(err) {
-//   assert.equal(null, err);
-//   console.log("Connected successfully to server");
-
-//   const db = client.db(dbName);
-
-//   client.close();
-// });
 
 const engines = require('consolidate');
 const express = require('express');
@@ -58,14 +37,20 @@ app.set('view engine', 'html');
 // Serve static files in /public
 app.use(express.static('public'));
 
-// Routes
-app.get("/", routes.index);
-app.get('/home', routes.home);
-app.get('/appointments', routes.appointments);
-app.get('/contact',  routes.contact );
-app.get('/symptoms', routes.symptoms);
-app.get('/settings', routes.settings);
-app.get("/callback", routes.callback);
+// Web pages
+// TODO: make API once database is connected
+let r = {
+  "/": routes.index,
+  "/appointments": routes.appointments,
+  "/contact": routes.contact,
+  "/symptoms": routes.symptoms,
+  "/settings": routes.settings,
+  "/callback": routes.callback
+};
+
+for (let [key, value] of Object.entries(r)){
+  app.get(key, value);
+}
 
 // Setup server
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

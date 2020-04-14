@@ -11,10 +11,6 @@ routes.index = function (req, res) {
     }
 }
 
-routes.home = function (req, res) {
-    res.render('home.html', req.openid.user.name);
-}
-
 routes.appointments = function (req, res) { 
     res.render('appointments.html');
 }
