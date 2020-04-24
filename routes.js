@@ -2,13 +2,8 @@ let routes = {};
 
 // req.isAuthenticated is provided from the auth router
 routes.index = function (req, res) {
-    let loggedIn = req.isAuthenticated();
-    if (loggedIn) {
-      console.log(req);
-      res.render("home.html", {name: req.openid.user.name});
-    } else {
-      res.redirect("/login");
-    }
+    res.send('Hello ' + JSON.stringify(req.session));
+    //res.render("home.html", {name: 'test'});
 }
 
 routes.appointments = function (req, res) { 
