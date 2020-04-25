@@ -3,10 +3,12 @@ index.js
 864163
 */
 
+
 const express = require('express');
 const engines = require('consolidate');
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const model = require('./models');
 const app = express();
 const port = process.env.PORT || 3000;
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
@@ -25,17 +27,27 @@ app.post('/login', (req, res, next) => {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [user, pass] = decoded.split(":");
+  let db = new model();
+  db.find("PatientPortal", "Users", {Username: user, Password: pass}, (docs) => {
+    console.log(!docs);
+    console.log(docs);
+    
+    let token = jwt.sign({
+      user: user
+    }, secret);
+  
+    res.cookie('jwt', token, {
+      httpOnly: true
+    });
 
-  let token = jwt.sign({
-    user: user
-  }, secret);
+    res.send(JSON.stringify({
+      success: true
+    }));
 
-  res.cookie('jwt', token, {httpOnly: true});
-  res.send(JSON.stringify({success:true}));
-
-  console.log("Generated token: " + token);
-  console.log(`User: ${user}, Password: ${pass}`);
-  next();
+    console.log("Generated token: " + token);
+    console.log(`User: ${user}, Password: ${pass}`);
+    next();
+  });
 });
 
 // Routes
@@ -48,36 +60,36 @@ routes.index = function (req, res) {
     let valid = jwt.verify(token, secret);
     if (valid) {
       console.log(valid.user);
-      res.render('home.html');
+      res.render('home.html', {name: valid.user});
     }
   } else {
     res.render('login.html');
   }
 }
 
-routes.appointments = function (req, res) { 
-    res.render('appointments.html');
+routes.appointments = function (req, res) {
+  res.render('appointments.html');
 }
 
 routes.contact = function (req, res) {
-    res.render('contact.html');
+  res.render('contact.html');
 }
 
 routes.symptoms = function (req, res) {
-    res.render("symptoms.html");
+  res.render("symptoms.html");
 }
 
 routes.settings = function (req, res) {
-    res.render("settings.html");
+  res.render("settings.html");
 }
 
 // Not sure exactly what this does yet...
 routes.callback = function (req, res) {
-    res.redirect("/home");
-    console.log(req);
+  res.redirect("/home");
+  console.log(req);
 }
 
-routes.logout = function(req, res) {
+routes.logout = function (req, res) {
   res.clearCookie('jwt');
   res.redirect("/");
 }
