@@ -3,8 +3,8 @@ index.js
 864163
 */
 
-
 const express = require('express');
+const bodyParser = require('body-parser');
 const engines = require('consolidate');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -13,7 +13,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
 
+// Setup cookie parser for HttpOnly cookies
 app.use(cookieParser());
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended:false}));
+// Parse application/json
+app.use(bodyParser.json());
 // Setup htmling template engine
 app.set('views', __dirname + '/views');
 app.engine('html', engines.htmling);
@@ -22,35 +27,47 @@ app.set('view engine', 'html');
 // Serve static files in /public
 app.use(express.static('public'));
 
-// Middleware test
-app.post('/login', (req, res, next) => {
+/* 
+  POST /login
+  Basic authentication => JSON web token
+*/
+app.post('/login', (req, res) => {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [user, pass] = decoded.split(":");
   let db = new model();
   db.find("PatientPortal", "Users", {Username: user, Password: pass}, (docs) => {
-    console.log(!docs);
-    console.log(docs);
+    if (docs.length < 1) {
+      console.log("Incorrect");
+      res.send(JSON.stringify({
+        success: false
+      }));
+    } else if (docs[0].Username == user && docs[0].Password == pass) {
+      console.log(docs);
+      console.log("Correct!");
+      let token = jwt.sign({
+        user: user
+      }, secret);
     
-    let token = jwt.sign({
-      user: user
-    }, secret);
+      res.cookie('jwt', token, {
+        httpOnly: true
+      });
   
-    res.cookie('jwt', token, {
-      httpOnly: true
-    });
-
-    res.send(JSON.stringify({
-      success: true
-    }));
-
-    console.log("Generated token: " + token);
-    console.log(`User: ${user}, Password: ${pass}`);
-    next();
+      res.send(JSON.stringify({
+        success: true
+      }));
+  
+      console.log("Generated token: " + token);
+      console.log(`User: ${user}, Password: ${pass}`);
+    } else {
+      res.send(JSON.stringify({
+        success: false
+      }));
+    }
   });
 });
 
-// Routes
+// Routes which render views
 let routes = {};
 
 // req.isAuthenticated is provided from the auth router
@@ -93,9 +110,8 @@ routes.logout = function (req, res) {
   res.clearCookie('jwt');
   res.redirect("/");
 }
-// End of routes
-// Web pages
-// TODO: make API once database is connected
+
+// Bind each route to a callback function
 let r = {
   "/": routes.index,
   "/appointments": routes.appointments,
@@ -105,6 +121,7 @@ let r = {
   "/callback": routes.callback,
   "/logout": routes.logout,
 };
+
 
 for (let [key, value] of Object.entries(r)) {
   app.get(key, value);
