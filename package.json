@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ricksterhd123/PatientPortal#readme",
   "dependencies": {
     "consolidate": "^0.15.1",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "htmling": "0.0.8",
     "jsonwebtoken": "^8.5.1",
