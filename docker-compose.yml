@@ -9,7 +9,9 @@ services:
             PORT: 3000
             user: root
             pass: example   # Should work out how to do this securely
-
+        volumes:
+            - /etc/letsencrypt/live/ricksterhd123.studio/privkey.pem:/usr/src/app/ssl/privkey.pem
+            - /etc/letsencrypt/live/ricksterhd123.studio/fullchain.pem:/usr/src/app/ssl/fullchain.pem
     mongo:
         image: mongo
         restart: always

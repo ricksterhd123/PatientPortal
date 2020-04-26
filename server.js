@@ -4,6 +4,8 @@ index.js
 */
 
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const engines = require('consolidate');
 const jwt = require('jsonwebtoken');
@@ -11,6 +13,25 @@ const cookieParser = require('cookie-parser');
 const model = require('./models');
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Attempt to find SSL certificate for https
+// if no SSl certificates found then use http
+
+var certsFound = true;
+var privateKey = null;
+var cert = null;
+
+try {
+  privateKey = fs.readFileSync('./ssl/privkey.pem');
+  cert = fs.readFileSync('./ssl/fullchain.pem');
+} catch (err) {
+  if (err.code === 'ENOENT') {
+    certsFound = false;
+  } else {
+    throw err;
+  }
+}
+
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
 
 // Setup cookie parser for HttpOnly cookies
@@ -27,7 +48,7 @@ app.set('view engine', 'html');
 // Serve static files in /public
 app.use(express.static('public'));
 
-/* 
+/*
   POST /login
   Basic authentication => JSON web token
 */
@@ -48,15 +69,12 @@ app.post('/login', (req, res) => {
       let token = jwt.sign({
         user: user
       }, secret);
-    
       res.cookie('jwt', token, {
         httpOnly: true
       });
-  
       res.send(JSON.stringify({
         success: true
       }));
-  
       console.log("Generated token: " + token);
       console.log(`User: ${user}, Password: ${pass}`);
     } else {
@@ -68,7 +86,7 @@ app.post('/login', (req, res) => {
 });
 
 // Routes which render views
-let routes = {};
+const routes = {};
 
 // req.isAuthenticated is provided from the auth router
 routes.index = function (req, res) {
@@ -112,7 +130,7 @@ routes.logout = function (req, res) {
 }
 
 // Bind each route to a callback function
-let r = {
+const r = {
   "/": routes.index,
   "/appointments": routes.appointments,
   "/contact": routes.contact,
@@ -122,10 +140,13 @@ let r = {
   "/logout": routes.logout,
 };
 
-
 for (let [key, value] of Object.entries(r)) {
   app.get(key, value);
 }
 
-// Setup server
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// Now serve https or http depending on certsFound
+if (!certsFound) {
+  app.listen(port, () => console.log(`Listening at http://localhost:${port}`))
+} else {
+  https.createServer({key: privateKey, cert: cert}, app).listen(port, () => console.log(`Listening at https://localhost:${port}!`));
+}
