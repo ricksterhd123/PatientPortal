@@ -25,11 +25,7 @@ try {
   privateKey = fs.readFileSync('./ssl/privkey.pem');
   cert = fs.readFileSync('./ssl/fullchain.pem');
 } catch (err) {
-  if (err.code === 'ENOENT') {
-    certsFound = false;
-  } else {
-    throw err;
-  }
+  certsFound = false;
 }
 
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
