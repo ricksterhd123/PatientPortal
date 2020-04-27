@@ -18,6 +18,22 @@ The software development of a web-based patient portal available to registered p
 
 - Mongo database         => Object oriented / JSON (preferably) / Easy CRUD
 
-- Auth0 login            => Protects API and web server doesn't store any credentials / Social media login / SSO
+- JWT authentication     => Easy way to authenticate API calls / can store any amount of data + cryptographically signed with server's key
 
 - Docker       => One-click deploy on the cloud / easy local dev environment setup / very convenient
+
+## Prerequisites
+
+- Docker version 19.03.8+
+
+- Docker-compose version 1.25.4+
+
+## How to run
+
+If you want automated updates from github then use install script otherwise use docker-compose manually.
+
+```bash
+docker-compose -f "docker-compose.yml" up -d --build # Without install.sh
+./install.sh # With install.sh
+```
+
