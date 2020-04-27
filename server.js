@@ -43,10 +43,9 @@ app.use((req, res, next) => {
 
 /* Redirect user to /login if they've not logged in yet */
 app.get('*', function(req, res, next) {
-  if (req.url === '/' || req.url === '/login' || req.url === '/register' || req.url === '/api/login' || req.url === '/api/register') {
+  if (req.url === '/login' || req.url === '/register' || req.url === '/api/login' || req.url === '/api/register') {
     return next();
   } else {
-    let token = req.cookies.jwt;
     if (req.token) {
       next();
     } else {
