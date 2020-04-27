@@ -22,7 +22,7 @@ class LoginPanel extends React.Component{
     submitHandle(event) {
         let xmlHttp = new XMLHttpRequest();
         let self = this;
-        xmlHttp.open( "POST", "/login", false);
+        xmlHttp.open( "POST", "/api/login", false);
         xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(this.state.username+":"+this.state.password));
         
         xmlHttp.onload = function (e) {
@@ -55,6 +55,8 @@ class LoginPanel extends React.Component{
                     <input type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
                     <input type="password" name="password" onChange={this.passInputHandle}></input>
                     <button type="submit" value="Login" onClick={this.submitHandle}>Login</button>
+                    <p>Not registered?</p>
+                    <a href="/register">Sign up</a>
                 </div>
     }
 }

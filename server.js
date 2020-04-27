@@ -30,10 +30,10 @@ app.set('view engine', 'html');
 app.use(express.static('public'));
 
 /*
-  POST /login
+  POST /api/login
   Basic authentication => JSON web token
 */
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [user, pass] = decoded.split(":");
@@ -79,8 +79,16 @@ routes.index = function (req, res) {
       res.render('home.html', {name: valid.user});
     }
   } else {
-    res.render('login.html');
+    res.redirect('/login');
   }
+}
+
+routes.login = function(req, res) {
+  res.render('login.html');
+}
+
+routes.register = function(req, res) {
+  res.send("Hello world!");
 }
 
 routes.appointments = function (req, res) {
@@ -113,6 +121,8 @@ routes.logout = function (req, res) {
 // Bind each route to a callback function
 const r = {
   "/": routes.index,
+  "/login": routes.login,
+  "/register": routes.register,
   "/appointments": routes.appointments,
   "/contact": routes.contact,
   "/symptoms": routes.symptoms,
