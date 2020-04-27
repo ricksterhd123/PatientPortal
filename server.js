@@ -29,18 +29,26 @@ app.set('view engine', 'html');
 // Serve static files in /public
 app.use(express.static('public'));
 
+app.use((req, res, next) => {
+  let token = req.cookies.jwt;
+  if (token) {
+    let valid = jwt.verify(token, secret);
+    if (valid){
+      req.token = valid;
+    }
+  }
+
+  next();
+});
+
 /* Redirect user to /login if they've not logged in yet */
 app.get('*', function(req, res, next) {
   if (req.url === '/' || req.url === '/login' || req.url === '/register' || req.url === '/api/login' || req.url === '/api/register') {
     return next();
   } else {
     let token = req.cookies.jwt;
-    if (token) {
-      let valid = jwt.verify(token, secret);
-      if (valid) {
-        req.token = valid;
-        next();
-      }
+    if (req.token) {
+      next();
     } else {
       res.redirect('/login');
     }
