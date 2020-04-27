@@ -33,6 +33,20 @@ app.use(express.static('public'));
   POST /api/login
   Basic authentication => JSON web token
 */
+
+app.get('*', function(req, res, next) {
+  if (req.url === '/' || req.url === '/login') return next();
+  let token = req.cookies.jwt
+  if (token) {
+    let valid = jwt.verify(token, secret);
+    if (valid) {
+      next();
+    }
+  } else {
+    res.redirect('/login');
+  }
+});
+
 app.post('/api/login', (req, res) => {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
@@ -71,16 +85,7 @@ const routes = {};
 
 // req.isAuthenticated is provided from the auth router
 routes.index = function (req, res) {
-  let token = req.cookies.jwt
-  if (token) {
-    let valid = jwt.verify(token, secret);
-    if (valid) {
-      console.log(valid.user);
-      res.render('home.html', {name: valid.user});
-    }
-  } else {
-    res.redirect('/login');
-  }
+  res.render('home.html', {name: valid.user});
 }
 
 routes.login = function(req, res) {
