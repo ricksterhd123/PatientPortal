@@ -39,5 +39,6 @@ docker-compose -f "docker-compose.yml" up -d --build
 
 ### Run the install script
 ```bash
+chmod +x install.sh
 ./install.sh
 ```
