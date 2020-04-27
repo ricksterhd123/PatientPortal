@@ -13,21 +13,6 @@ const cookieParser = require('cookie-parser');
 const model = require('./models');
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Attempt to find SSL certificate for https
-// if no SSl certificates found then use http
-
-var certsFound = true;
-var privateKey = null;
-var cert = null;
-
-try {
-  privateKey = fs.readFileSync('./ssl/privkey.pem');
-  cert = fs.readFileSync('./ssl/fullchain.pem');
-} catch (err) {
-  certsFound = false;
-}
-
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
 
 // Setup cookie parser for HttpOnly cookies
@@ -140,9 +125,4 @@ for (let [key, value] of Object.entries(r)) {
   app.get(key, value);
 }
 
-// Now serve https or http depending on certsFound
-if (!certsFound) {
-  app.listen(port, () => console.log(`Listening at http://localhost:${port}`))
-} else {
-  https.createServer({key: privateKey, cert: cert}, app).listen(port, () => console.log(`Listening at https://localhost:${port}!`));
-}
+app.listen(port, () => console.log(`Listening at http://localhost:${port}`))
