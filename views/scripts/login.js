@@ -31,7 +31,7 @@ class LoginPanel extends React.Component{
               console.log(xmlHttp.responseText);
               let success = JSON.parse(xmlHttp.responseText).success;
               if (success){
-                  location.reload();
+                  window.location.href = "/";
               } else {
                   self.setState({success:false});
               }
