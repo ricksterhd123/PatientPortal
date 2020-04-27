@@ -29,11 +29,7 @@ app.set('view engine', 'html');
 // Serve static files in /public
 app.use(express.static('public'));
 
-/*
-  POST /api/login
-  Basic authentication => JSON web token
-*/
-
+/* Redirect user to /login if they've not logged in yet */
 app.get('*', function(req, res, next) {
   if (req.url === '/' || req.url === '/login') return next();
   let token = req.cookies.jwt
@@ -47,6 +43,10 @@ app.get('*', function(req, res, next) {
   }
 });
 
+/*
+  POST /api/login
+  Basic authentication => JSON web token
+*/
 app.post('/api/login', (req, res) => {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
