@@ -38,6 +38,7 @@ app.get('*', function(req, res, next) {
     if (token) {
       let valid = jwt.verify(token, secret);
       if (valid) {
+        req.token = valid;
         next();
       }
     } else {
@@ -88,7 +89,8 @@ const routes = {};
 
 // req.isAuthenticated is provided from the auth router
 routes.index = function (req, res) {
-  res.render('home.html', {name: valid.user});
+  let token = req.token;
+  res.render('home.html', {name: token.user});
 }
 
 routes.login = function(req, res) {
