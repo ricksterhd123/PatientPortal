@@ -31,15 +31,18 @@ app.use(express.static('public'));
 
 /* Redirect user to /login if they've not logged in yet */
 app.get('*', function(req, res, next) {
-  if (req.url === '/' || req.url === '/login') return next();
-  let token = req.cookies.jwt
-  if (token) {
-    let valid = jwt.verify(token, secret);
-    if (valid) {
-      next();
-    }
+  if (req.url === '/' || req.url === '/login' || req.url === '/register') {
+    return next();
   } else {
-    res.redirect('/login');
+    let token = req.cookies.jwt;
+    if (token) {
+      let valid = jwt.verify(token, secret);
+      if (valid) {
+        next();
+      }
+    } else {
+      res.redirect('/login');
+    }
   }
 });
 
