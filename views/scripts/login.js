@@ -50,6 +50,7 @@ class LoginPanel extends React.Component{
 
     render(){
         return <div>
+                    <h1>Patient portal login</h1>
                     <p>{this.state.success?"":"Invalid username or password!"}</p>
                     <input type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
                     <input type="password" name="password" onChange={this.passInputHandle}></input>
