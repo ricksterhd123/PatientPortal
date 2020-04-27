@@ -91,6 +91,12 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+// GET /api/logout - removes jwt httponly cookie from browser then redirects to index
+app.get("/api/logout", function (req, res) {
+  res.clearCookie('jwt');
+  res.redirect("/");
+});
+
 // Routes which render views
 const routes = {};
 
@@ -124,17 +130,6 @@ routes.settings = function (req, res) {
   res.render("settings.html");
 }
 
-// Not sure exactly what this does yet...
-routes.callback = function (req, res) {
-  res.redirect("/home");
-  console.log(req);
-}
-
-routes.logout = function (req, res) {
-  res.clearCookie('jwt');
-  res.redirect("/");
-}
-
 // Bind each route to a callback function
 const r = {
   "/": routes.index,
@@ -143,9 +138,7 @@ const r = {
   "/appointments": routes.appointments,
   "/contact": routes.contact,
   "/symptoms": routes.symptoms,
-  "/settings": routes.settings,
-  "/callback": routes.callback,
-  "/logout": routes.logout,
+  "/settings": routes.settings
 };
 
 for (let [key, value] of Object.entries(r)) {
