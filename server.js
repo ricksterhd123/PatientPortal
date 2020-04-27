@@ -31,7 +31,7 @@ app.use(express.static('public'));
 
 /* Redirect user to /login if they've not logged in yet */
 app.get('*', function(req, res, next) {
-  if (req.url === '/' || req.url === '/login' || req.url === '/register') {
+  if (req.url === '/' || req.url === '/login' || req.url === '/register' || req.url === '/api/login' || req.url === '/api/register') {
     return next();
   } else {
     let token = req.cookies.jwt;
