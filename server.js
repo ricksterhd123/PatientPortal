@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
 
 // Setup pug template engine
-app.set('view engine', 'pug')
+app.set('view engine', 'pug');
 // Setup cookie parser for HttpOnly cookies
 app.use(cookieParser());
 // Parse application/x-www-form-urlencoded
@@ -98,31 +98,31 @@ const routes = {};
 routes.index = function (req, res) {
   let token = req.token;
   res.render('home.pug', {name: token.user});
-}
+};
 
 routes.login = function(req, res) {
   res.render('login.pug');
-}
+};
 
 routes.register = function(req, res) {
   res.send("Hello world!");
-}
+};
 
 routes.appointments = function (req, res) {
   res.render('appointments.pug');
-}
+};
 
 routes.contact = function (req, res) {
   res.render('contact.pug');
-}
+};
 
 routes.symptoms = function (req, res) {
   res.render("symptoms.pug");
-}
+};
 
 routes.settings = function (req, res) {
   res.render("settings.pug");
-}
+};
 
 // Bind each route to a callback function
 const r = {
@@ -139,4 +139,4 @@ for (let [key, value] of Object.entries(r)) {
   app.get(key, value);
 }
 
-app.listen(port, () => console.log(`Listening at http://localhost:${port}`))
+app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
