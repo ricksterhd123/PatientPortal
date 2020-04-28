@@ -99,11 +99,11 @@ const routes = {};
 // req.isAuthenticated is provided from the auth router
 routes.index = function (req, res) {
   let token = req.token;
-  res.render('home.html', {name: token.user});
+  res.marko('home.html', {name: token.user});
 }
 
 routes.login = function(req, res) {
-  res.render('login.html');
+  res.marko('login.html');
 }
 
 routes.register = function(req, res) {
@@ -111,19 +111,19 @@ routes.register = function(req, res) {
 }
 
 routes.appointments = function (req, res) {
-  res.render('appointments.html');
+  res.marko('appointments.html');
 }
 
 routes.contact = function (req, res) {
-  res.render('contact.html');
+  res.marko('contact.html');
 }
 
 routes.symptoms = function (req, res) {
-  res.render("symptoms.html");
+  res.marko("symptoms.html");
 }
 
 routes.settings = function (req, res) {
-  res.render("settings.html");
+  res.marko("settings.html");
 }
 
 // Bind each route to a callback function
