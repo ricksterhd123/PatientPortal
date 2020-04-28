@@ -1,7 +1,5 @@
 /*jshint esversion: 6*/
-
 const express = require('express');
-const markoExpress = require('marko/express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -13,18 +11,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
 
+// Setup pug template engine
+app.set('view engine', 'pug')
 // Setup cookie parser for HttpOnly cookies
 app.use(cookieParser());
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended:false}));
 // Parse application/json
 app.use(bodyParser.json());
-// Setup marko template engine
-app.use(markoExpress());
-
 // Serve static files in /public
 app.use(express.static('public'));
 
+// Middleware to verify if the jwt token is valid
 app.use((req, res, next) => {
   let token = req.cookies.jwt;
   if (token) {
@@ -37,7 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
-/* Redirect user to /login if they've not logged in yet */
+// Redirect user to /login if they've not logged in yet
 app.get('*', function(req, res, next) {
   if (req.url === '/login' || req.url === '/register' || req.url === '/api/login' || req.url === '/api/register') {
     return next();
@@ -99,11 +97,11 @@ const routes = {};
 // req.isAuthenticated is provided from the auth router
 routes.index = function (req, res) {
   let token = req.token;
-  res.marko('home.html', {name: token.user});
+  res.render('home.pug', {name: token.user});
 }
 
 routes.login = function(req, res) {
-  res.marko('login.html');
+  res.render('login.pug');
 }
 
 routes.register = function(req, res) {
@@ -111,19 +109,19 @@ routes.register = function(req, res) {
 }
 
 routes.appointments = function (req, res) {
-  res.marko('appointments.html');
+  res.render('appointments.pug');
 }
 
 routes.contact = function (req, res) {
-  res.marko('contact.html');
+  res.render('contact.pug');
 }
 
 routes.symptoms = function (req, res) {
-  res.marko("symptoms.html");
+  res.render("symptoms.pug");
 }
 
 routes.settings = function (req, res) {
-  res.marko("settings.html");
+  res.render("settings.pug");
 }
 
 // Bind each route to a callback function
