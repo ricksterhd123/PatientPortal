@@ -1,16 +1,14 @@
-/*
-index.js
-864163
-*/
+/*jshint esversion: 6*/
 
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
+const markoExpress = require('marko/express');
 const bodyParser = require('body-parser');
-const engines = require('consolidate');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+
 const model = require('./models');
+
+
 const app = express();
 const port = process.env.PORT || 3000;
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
@@ -21,10 +19,8 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:false}));
 // Parse application/json
 app.use(bodyParser.json());
-// Setup htmling template engine
-app.set('views', __dirname + '/views');
-app.engine('html', engines.htmling);
-app.set('view engine', 'html');
+// Setup marko template engine
+app.use(markoExpress());
 
 // Serve static files in /public
 app.use(express.static('public'));

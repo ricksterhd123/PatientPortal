@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 const MongoClient = require('mongodb').MongoClient;
 const client = new MongoClient(`mongodb://${process.env.user}:${process.env.pass}@mongo:27017`, { useUnifiedTopology: true });
 const assert = require('assert');

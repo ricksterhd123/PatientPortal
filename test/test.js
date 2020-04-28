@@ -1,6 +1,4 @@
-/*
-Unit test file
- */
+/* jshint esversion: 6 */
 
 let assert = require('assert');
 const {describe, it} = require("mocha");
