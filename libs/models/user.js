@@ -1,8 +1,5 @@
 /* jshint esversion: 6 */
 const assert = require('assert');
-const bcrypt = require('bcrypt');
-
-const saltRound = 10;
 const dbName = "PatientPortal";
 const collectionName = "Users";
 
