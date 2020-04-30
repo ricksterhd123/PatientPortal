@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "babel views/components -d public/scripts && node --trace-warnings server.js",
-    "test": "mocha test/test.js"
+    "test": "babel views/components -d public/scripts && mocha test/test.js"
   },
   "repository": {
     "type": "git",
