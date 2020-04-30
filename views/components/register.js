@@ -21,8 +21,8 @@ class RegisterPanel extends React.Component{
         let xmlHttp = new XMLHttpRequest();
         let self = this;
         xmlHttp.open( "POST", "/api/register", false);
-        xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(this.state.username+":"+this.state.password));
-        
+        xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
         xmlHttp.onload = function (e) {
           if (xmlHttp.readyState === 4) {
             if (xmlHttp.status === 200) {
@@ -41,14 +41,15 @@ class RegisterPanel extends React.Component{
         xmlHttp.onerror = function (e) {
           console.error(xhr.statusText);
         };
-        xmlHttp.send( null );
+        xmlHttp.send( JSON.stringify({username: this.state.username, password: this.state.password}) );
         event.preventDefault();
     }
 
     render(){
         return <div>
                     <h1>The Nuffield Center GP</h1>
-                    <p>{this.state.success?"":"Failed to login please try again"}</p>
+                    <p>{this.state.success?"":"Could not register, please try a different username"}</p>
+                    <p>WARNING: This is for demonstration purposes only, please use at your own risk!</p>
                     <p>Username:</p>
                     <input type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
                     <p>Password:</p>
