@@ -10,11 +10,11 @@ class LoginPanel extends React.Component{
     }
 
     userInputHandle(event) {
-        this.setState({username: event.target.value})
+        this.setState({username: event.target.value});
     }
 
     passInputHandle(event) {
-        this.setState({password: event.target.value})
+        this.setState({password: event.target.value});
     }
 
     submitHandle(event) {
@@ -42,8 +42,7 @@ class LoginPanel extends React.Component{
           console.error(xhr.statusText);
         };
         xmlHttp.send( null );
-        console.log("happened")  // send request, don't care about response
-        event.preventDefault()
+        event.preventDefault();
     }
 
     render(){
