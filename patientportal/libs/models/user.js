@@ -29,14 +29,10 @@ class User {
 function createUser(user) {
     return new Promise(async function (resolve, reject) {
         // Check no other users exist with the same username
-        let userExists = await getUser(user).catch((err) => {
-            reject(err);
-        });
+        let userExists = await getUser(user).catch(reject);
 
         if (!userExists) {
-            let client = await mongo.client.connect(mongo.URL, mongo.options).catch((err) => {
-                reject(err);
-            });
+            let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
             let db = client.db(dbName);
             // Get the documents collection
             let = collection = db.collection(collectionName);
@@ -68,18 +64,15 @@ function createUser(user) {
  */
 function getUser(user) {
     return new Promise(async function (resolve, reject) {
-        let client = await mongo.client.connect(mongo.URL, mongo.options).catch((err) => {
-            reject(err);
-        });
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
         let db = client.db(dbName);
         // Get the documents collection
         let collection = db.collection(collectionName);
         // Find some documents
         let docs = await collection.find({
             username: user.username
-        }).toArray().catch((err) => {
-            reject(err)
-        });
+        }).toArray().catch(reject);
+
         if (docs.length == 1){
             resolve(new User(docs[0]));
         } else {

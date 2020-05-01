@@ -5,14 +5,16 @@ const routes = {};
 // req.isAuthenticated is provided from the auth router
 routes.index = async function (req, res) {
   let token = req.token;
-  var user = new userModel.User(null, token.username);
-
-  user = await userModel.getUser(user).catch((err) => {
-    console.trace(err);
-    res.status(401).send("Error: could not get user with token");
-  });
-
-  res.render('home.pug', { title: "Home", name: token.username, role: user.options.role });
+  if (!token) {
+    res.status(401).send();
+  } else {
+    var user = new userModel.User(null, token.username);
+    user = await userModel.getUser(user).catch((err) => {
+      console.trace(err);
+      res.status(401).send("Error: could not get user with token");
+    });
+    res.render('home.pug', { title: "Home", name: token.username, role: user.options.role });
+  }
 };
 
 routes.register = function (req, res) {

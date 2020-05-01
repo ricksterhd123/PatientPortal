@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({
 // Parse application/json
 app.use(bodyParser.json());
 // Serve static files in /public
-app.use(express.static("./public/"));
+app.use(express.static('public'));
 
 // Middleware to verify if the jwt token is valid
 app.use(async function (req, res, next) {
@@ -64,13 +64,12 @@ app.post('/api/login', async function (req, res) {
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
   var user = new userModel.User(null, username);
+  user = await userModel.getUser(user).catch(console.trace(err));
 
-  user = await userModel.getUser(user).catch((err) => {
-    console.trace(err);
-  });
   if (user) {
     let hash = user.password;
     let result = await bcrypt.compare(password, hash);
+
     if (result) {
       res.cookie('jwt', jwt.sign({
         username: username
@@ -78,6 +77,7 @@ app.post('/api/login', async function (req, res) {
         httpOnly: true
       });
     }
+
     res.send(JSON.stringify({
       success: result,
       error: result ? null : "Invalid username or password..."
@@ -88,7 +88,6 @@ app.post('/api/login', async function (req, res) {
       error: "Invalid username or password..."
     }));
   }
-
 });
 
 /**
@@ -126,19 +125,15 @@ app.post("/api/register", async function (req, res) {
         });
 
         if (hash) {
-          let count = await userModel.getNumberOfUsers().catch((err) => {
-            console.trace(err);
-          });
+          let count = await userModel.getNumberOfUsers().catch(console.trace);
           
           let role = roles.USER;
-          if (count && count == 0) {
+          if (count == 0) {
             role = roles.ADMIN;
           }
 
-          let user = new userModel.User(null, username, hash, {role: roles.USER});
-          var success = await userModel.createUser(user).catch((err) => {
-            console.trace(err);
-          });
+          let user = new userModel.User(null, username, hash, {role: role});
+          var success = await userModel.createUser(user).catch(console.trace);
 
           if (success) {
             let token = jwt.sign({
