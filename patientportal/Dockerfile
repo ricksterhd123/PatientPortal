@@ -4,6 +4,6 @@ COPY package.json .
 RUN apk --no-cache add --virtual builds-deps build-base python
 RUN npm install
 COPY . .
-RUN npm compile
+RUN npm run compile
 CMD npm start
 EXPOSE ${PORT}
