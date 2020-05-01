@@ -7,9 +7,9 @@ const collectionName = "Users";
 /**
  * User document object structure from database
  */
-class user {
+class User {
     constructor(user, username, password, options) {
-        if (!this.user){
+        if (!user) {
             this.username = "" || username;
             this.password = "" || password;
             this.options = {} || options;
@@ -22,45 +22,49 @@ class user {
 }
 
 /**
- * Create a user if not exists, callback returns false if it exists otherwise true if it's created.
- * @param {*} mongoClient - MongoClient object
+ * Create a user if not exists and returns promise.
  * @param {*} user - user object
- * @param {*} callback - function callback(success: bool)
+ * @returns Promise
  */
 function createUser(user) {
     return new Promise(async function (resolve, reject) {
         // Check no other users exist with the same username
-        let docs = await getUser(user).catch((err) => {
+        let user = await getUser(user).catch((err) => {
             reject(err);
         });
 
-        if (docs.length < 1) {
+        if (!user) {
             let client = await mongo.client.connect(mongo.URL, mongo.options).catch((err) => {
                 reject(err);
             });
             let db = client.db(dbName);
             // Get the documents collection
             let = collection = db.collection(collectionName);
-            let result = await collection.insertOne({ Username: user.username, Password: user.password, Options: user.options }).catch((err) => {
+            let result = await collection.insertOne({
+                username: user.username,
+                password: user.password,
+                options: user.options
+            }).catch((err) => {
                 reject(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
             });
 
+            // resolve new User ??
             if (result.insertedCount == 1) {
                 resolve(true);
             } else {
                 reject("Inserted more than one documents");
             }
         } else {
-            reject(err);
+            reject("Failed to register please try a different username");
         }
     });
 } // => user
 
-
 /**
- * Get promise which returns user object
- * @param {*} mongoClient 
- * @param {*} user 
+ * Find user returns promise,
+ * note: resolve given false is no user is found
+ * @param {*} user - A user object, needs at least a username
+ * @returns Promise 
  */
 function getUser(user) {
     return new Promise(async function (resolve, reject) {
@@ -71,21 +75,27 @@ function getUser(user) {
         // Get the documents collection
         let collection = db.collection(collectionName);
         // Find some documents
-        let docs = await collection.find({ Username: user.username }).toArray().catch((err) => {
+        let docs = await collection.find({
+            username: user.username
+        }).toArray().catch((err) => {
             reject(err)
         });
-        resolve(docs);
+
+        console.log(docs);
+        if (docs.length == 1){
+            resolve(new User(docs[0]));
+        } else {
+            resolve(false);
+        }
     });
 } // => user
 
-function updateUser(user) {
-} // => bool
+function updateUser(user) {} // => bool
 
-function deleteUser(user) {
-} // => bool
+function deleteUser(user) {} // => bool
 
 module.exports = {
-    user,
+    User,
     createUser,
     getUser
 };

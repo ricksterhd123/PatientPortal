@@ -1,7 +1,6 @@
 /* Not actually at test, just learning promises + async/await stuff */
-function asyncSquare(n) {
+function square(n) {
     return new Promise(function (resolve, reject) {
-
         if (n < 0){ 
             reject(n); 
         } else {
@@ -10,12 +9,20 @@ function asyncSquare(n) {
     });
 }
 
-async function printSquare(n) {
-    let result = await asyncSquare(n);
-    console.log(`Result: ${result}`)
+async function asyncSquare(n) {
+    let result = await square(n);
+    return result;
 }
 
-// let promise = asyncSquare(-4);
-// promise.then(console.log).catch(console.log).finally(console.log);
-var a = printSquare(-5);
-console.log(a);
+async function test(x){
+    var a = await asyncSquare(x).catch((err) => {
+        console.error(err);
+    });
+    if (a) {
+        console.log(a);
+    }
+}
+
+test(10);
+test(20);
+test(25);
