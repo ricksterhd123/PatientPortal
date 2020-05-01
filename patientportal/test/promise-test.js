@@ -16,7 +16,7 @@ async function asyncSquare(n) {
 
 async function test(x){
     var a = await asyncSquare(x).catch((err) => {
-        console.error(err);
+        console.trace(err);
     });
     if (a) {
         console.log(a);

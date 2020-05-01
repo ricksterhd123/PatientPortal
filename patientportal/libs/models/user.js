@@ -88,6 +88,16 @@ function getUser(user) {
     });
 } // => user
 
+function getNumberOfUsers() {
+    return new Promise(async function (resolve, reject) {
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
+        let db = client.db(dbName);
+        let collection = db.collection(collectionName);
+        let docs = await collection.find({}).toArray().catch(reject);
+        resolve(docs.length);
+    });
+} // => number
+
 function updateUser(user) {} // => bool
 
 function deleteUser(user) {} // => bool
@@ -95,5 +105,6 @@ function deleteUser(user) {} // => bool
 module.exports = {
     User,
     createUser,
-    getUser
+    getUser,
+    getNumberOfUsers
 };

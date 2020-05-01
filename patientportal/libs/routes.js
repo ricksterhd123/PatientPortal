@@ -8,7 +8,7 @@ routes.index = async function (req, res) {
   var user = new userModel.User(null, token.username);
 
   user = await userModel.getUser(user).catch((err) => {
-    console.error(err);
+    console.trace(err);
     res.status(401).send("Error: could not get user with token");
   });
 

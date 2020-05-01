@@ -66,7 +66,7 @@ app.post('/api/login', async function (req, res) {
   var user = new userModel.User(null, username);
 
   user = await userModel.getUser(user).catch((err) => {
-    console.error(err);
+    console.trace(err);
   });
   if (user) {
     let hash = user.password;
@@ -109,7 +109,7 @@ app.post("/api/register", async function (req, res) {
 
     if (valid) {
       let salt = await bcrypt.genSalt(saltRounds).catch((err) => {
-        console.error(err);
+        console.trace(err);
         res.send(JSON.stringify({
           success: false,
           error: "Come back again later..."
@@ -118,7 +118,7 @@ app.post("/api/register", async function (req, res) {
 
       if (salt) {
         let hash = await bcrypt.hash(password, salt).catch((err) => {
-          console.error(err);
+          console.trace(err);
           res.send(JSON.stringify({
             success: false,
             error: "Come back again later..."
@@ -126,20 +126,33 @@ app.post("/api/register", async function (req, res) {
         });
 
         if (hash) {
+          let count = await userModel.getNumberOfUsers().catch((err) => {
+            console.trace(err);
+          });
+          
+          let role = roles.USER;
+          if (count && count == 0) {
+            role = roles.ADMIN;
+          }
+
           let user = new userModel.User(null, username, hash, {role: roles.USER});
-          console.log(user.options);
-          let success = await userModel.createUser(user).catch((err) => {
-            console.error(err);
+          var success = await userModel.createUser(user).catch((err) => {
+            console.trace(err);
           });
 
           if (success) {
             let token = jwt.sign({
               username: user.username
             }, secret);
+
             if (token) {
               res.cookie('jwt', token, {
                 httpOnly: true
               });
+
+            } else {
+              console.trace("Could not create token");
+              success = false;
             }
           }
 
