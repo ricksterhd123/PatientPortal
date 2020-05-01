@@ -10,12 +10,10 @@ const validator = require('./libs/validators');
 const routes = require('./libs/routes');
 const roles = require('./libs/roles');
 
-
 const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 10; // bcrypt salt rounds
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
-
 
 // Setup pug template engine
 app.set('view engine', 'pug');
