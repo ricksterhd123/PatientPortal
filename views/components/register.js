@@ -54,9 +54,9 @@ class RegisterPanel extends React.Component{
                     <input type="password" name="password" onChange={this.passInputHandle}></input>
                     <p>Repeat password:</p>
                     <input type="password" name="repeat password"></input>
-                    <button type="submit" value="Login" onClick={this.submitHandle}>Login</button>
-                    <p>Not registered?</p>
-                    <a href="/register">Sign up</a>
+                    <button type="submit" value="Login" onClick={this.submitHandle}>Register</button>
+                    <p>Already registered?</p>
+                    <a href="/login">Login</a>
                 </div>
     }
 }
