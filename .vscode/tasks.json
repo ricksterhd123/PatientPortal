@@ -9,7 +9,7 @@
         {
             "label": "postLaunch",
             "type": "shell",
-            "command": "docker-compose -f '.vscode/docker-compose.yml' stop"
+            "command": "bash .vscode/postLaunch.sh"
         }
     ]
 }
