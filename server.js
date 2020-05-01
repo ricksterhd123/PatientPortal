@@ -52,10 +52,10 @@ app.get('*', async function (req, res, next) {
   }
 });
 
-/*
+/**
   POST /api/login
   Basic authentication => JSON web token
-*/
+ */
 app.post('/api/login', async function (req, res) {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
@@ -88,6 +88,15 @@ app.post('/api/login', async function (req, res) {
 
 });
 
+/**
+ * POST /api/register
+ * Content-type: json/application 
+ * example: 
+ * req.body = {
+ *    username: "username",
+ *    password: "password"
+ * }
+ */
 app.post("/api/register", async function (req, res) {
   var token = req.token;
   if (!token) {
@@ -157,8 +166,10 @@ app.get("/api/logout", async function (req, res) {
   res.redirect("/");
 });
 
+// GET routes
 for (let [key, value] of Object.entries(routes)) {
   app.get(key, value);
 }
 
+// Start server
 app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
