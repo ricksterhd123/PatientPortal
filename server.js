@@ -1,5 +1,3 @@
-/*jshint esversion: 8*/
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
@@ -61,9 +59,10 @@ app.post('/api/login', (req, res) => {
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
-
   let user = new userModel.user(username);
-  userModel.getUser(client, user, (docs) => {
+
+  let docs = await userModel.getUser(client, user);
+  if (docs) {
     if (docs.length < 1) {
       console.log("Incorrect");
       res.send(JSON.stringify({
@@ -73,15 +72,16 @@ app.post('/api/login', (req, res) => {
       assert.equal(docs.length, 1); // Shouldn't be more than 1 
       let hash = docs[0].Password;
       console.log(`Hash: ${hash}`);
-      bcrypt.compare(password, hash, (err, result) => {
-        assert.equal(err, null);
+      let result = await bcrypt.compare(password, hash);
+      if (result) {
         if (result) {
           res.cookie('jwt', jwt.sign({ username: username }, secret), { httpOnly: true });
         }
         res.send(JSON.stringify({ success: result }));
-      });
+      }
     }
-  });
+  }
+
 });
 
 app.post("/api/register", function (req, res) {
@@ -90,12 +90,13 @@ app.post("/api/register", function (req, res) {
     let username = req.body.username;
     let password = req.body.password;
 
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      assert.equal(err, null);
-      bcrypt.hash(password, salt, function (err, hash) {
-        assert.equal(err, null);
+    let salt = await bcrypt.genSalt(saltRounds);
+    if (salt) {
+      let hash = await bcrypt.hash(password, salt)
+      if (hash) {
         let user = new userModel.user(username, hash);
-        userModel.createUser(client, user, (success) => {
+        let success = await userModel.createUser(client, user);
+        if (success) {
           if (success) {
             let token = jwt.sign({ username: user.username }, secret);
             if (token) {
@@ -103,14 +104,13 @@ app.post("/api/register", function (req, res) {
             }
           }
           res.send(JSON.stringify({ success: success }));
-        });
-      });
-    });
-
+        }
+      }
+    }
   } else {
     res.send(JSON.stringify({ success: false }));
   }
-});
+}
 
 // GET /api/logout - removes jwt httponly cookie from browser then redirects to index
 app.get("/api/logout", function (req, res) {

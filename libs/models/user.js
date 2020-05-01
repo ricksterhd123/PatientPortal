@@ -1,9 +1,18 @@
-/* jshint esversion: 8 */
 const assert = require('assert');
 const dbName = "PatientPortal";
 const collectionName = "Users";
 
+
+/**
+ * User document object structure from database
+ */
 class user {
+    constructor(user) {
+        this.username = user.username;
+        this.password = user.password;
+        this.options = user.options;
+    }
+
     constructor(username, password, options) {
         this.username = "" || username;
         this.password = "" || password;
@@ -30,11 +39,13 @@ function createUser(mongoClient, user) {
                             if (!err && r.insertedCount == 1) {
                                 resolve(true);
                             } else {
-                                reject(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
+                                console.error(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
+                                reject(false);
                             }
                         });
                     } else {
-                        reject(err);
+                        console.error(error);
+                        reject(false);
                     }
                 });
             } else {
@@ -61,13 +72,15 @@ function getUser(mongoClient, user) {
                     // Find some documents
                     collection.find({ Username: user.username }).toArray((err, docs) => {
                         if (err) {
-                            reject(err);
+                            console.error(err);
+                            reject(false)
                         } else {
                             resolve(docs);
                         }
                     });
                 } else {
-                    reject(err);
+                    console.error(err);
+                    reject(false);
                 }
             });
         });

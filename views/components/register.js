@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-
 class RegisterPanel extends React.Component{
     constructor(props) {
         super(props);

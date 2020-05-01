@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-
 let assert = require('assert');
 const {describe, it} = require("mocha");
 

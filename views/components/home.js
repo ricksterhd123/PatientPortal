@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-
 class IndexNavigation extends React.Component {
     render(){
         return <div id={this.props.id}>
