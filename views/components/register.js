@@ -25,20 +25,25 @@ class RegisterPanel extends React.Component{
           if (xmlHttp.readyState === 4) {
             if (xmlHttp.status === 200) {
               console.log(xmlHttp.responseText);
-              let success = JSON.parse(xmlHttp.responseText).success;
+              let json = JSON.parse(xmlHttp.responseText);
+              let success = json.success;
+              let error = json.error;
+
               if (success){
                   window.location.href = "/";
               } else {
-                  self.setState({success:false});
+                  self.setState({success: success, error: error});
               }
             } else {
               console.error(xmlHttp.statusText);
             }
           }
         };
+
         xmlHttp.onerror = function (e) {
           console.error(xhr.statusText);
         };
+        
         xmlHttp.send( JSON.stringify({username: this.state.username, password: this.state.password}) );
         event.preventDefault();
     }
@@ -46,7 +51,7 @@ class RegisterPanel extends React.Component{
     render(){
         return <div>
                     <h1>The Nuffield Center GP</h1>
-                    <p>{this.state.success?"":"Could not register, please try a different username"}</p>
+                    <p>{this.state.success?"":this.state.error}</p>
                     <p>WARNING: This is for demonstration purposes only, please use at your own risk!</p>
                     <p>Username:</p>
                     <input type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>

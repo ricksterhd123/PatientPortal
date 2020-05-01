@@ -3,7 +3,7 @@ function username(username) {
 }
 
 function password(password) {
-    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(password);
+    return /^[0-9a-zA-Z_,-]+$/.test(password) && password.length >= 5;
 }
 
 module.exports = { username, password };
