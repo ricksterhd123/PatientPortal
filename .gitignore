@@ -110,6 +110,4 @@ dist
 .idea/
 
 # compiled from babeljs
-public/scripts
-
-data/
+src/public/scripts
