@@ -1,4 +1,4 @@
-/* jshint esversion: 6 */
+/* jshint esversion: 8 */
 
 class IndexNavigation extends React.Component {
     render(){

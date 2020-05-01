@@ -1,4 +1,4 @@
-/* jshint esversion: 6 */
+/* jshint esversion: 8 */
 
 class LoginPanel extends React.Component{
     constructor(props) {
