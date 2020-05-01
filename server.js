@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
-const MongoClient = require('mongodb').MongoClient;
+
 const assert = require('assert');
 const userModel = require('./libs/models/user');
 const validator = require('./libs/validators');
@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 10;  // bcrypt salt rounds
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
-const client = new MongoClient(`mongodb://${process.env.user}:${process.env.pass}@mongo:27017`, { useUnifiedTopology: true });
+
 
 // Setup pug template engine
 app.set('view engine', 'pug');
@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Middleware to verify if the jwt token is valid
-app.use(async function (req, res, next) => {
+app.use(async function (req, res, next) {
   let token = req.cookies.jwt;
   if (token) {
     let valid = jwt.verify(token, secret);
@@ -54,13 +54,16 @@ app.get('*', async function (req, res, next) {
   POST /api/login
   Basic authentication => JSON web token
 */
-app.post('/api/login', async function login(req, res){
+app.post('/api/login', async function (req, res){
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
-  let user = new userModel.user(username);
+  let user = new userModel.user(null, username);
+  console.log("call await")
+  let docs = await userModel.getUser(user).catch((err) => {
+    console.error(err);
+  });
 
-  let docs = await userModel.getUser(_, client, user).catch(() => {res.JSON.stringify({success:false})});
   if (docs) {
     if (docs.length < 1) {
       console.log("Incorrect");
@@ -79,6 +82,8 @@ app.post('/api/login', async function login(req, res){
         res.send(JSON.stringify({ success: result }));
       }
     }
+  } else {
+    res.send(JSON.stringify({success: false}));
   }
 
 });
@@ -94,24 +99,27 @@ app.post("/api/register", async function (req, res) {
         res.send(JSON.stringify({success:false}))
       });
 
-      let hash = await bcrypt.hash(password, salt).catch((err) => {
-        console.error(err);
-        res.send(JSON.stringify({success: false}));
-      });
+      if (salt) {
+        let hash = await bcrypt.hash(password, salt).catch((err) => {
+          console.error(err);
+          res.send(JSON.stringify({success: false}));
+        });
+        
+        if (hash) {
+          let user = new userModel.user(null, username, hash);
+          let success = await userModel.createUser(user).catch((err) => {
+            console.error(err);
+          });
 
-      let user = new userModel.user(_, username, hash);
-      let success = await userModel.createUser(client, user).catch((success) => {
-        console.error("Could not create user because it exists");
-        res.send(JSON.stringify({success: false}));
-      });
-
-      if (success) {
-        let token = jwt.sign({ username: user.username }, secret);
-        if (token) {
-          res.cookie('jwt', token, { httpOnly: true });
+          if (success) {
+            let token = jwt.sign({ username: user.username }, secret);
+            if (token) {
+              res.cookie('jwt', token, { httpOnly: true });
+            }
+          }
+          res.send(JSON.stringify({ success: success }));
         }
       }
-      res.send(JSON.stringify({ success: success }));
 
     } else {
       res.send(JSON.stringify({success: false}));
@@ -126,8 +134,6 @@ app.get("/api/logout", async function (req, res) {
   res.clearCookie('jwt');
   res.redirect("/");
 });
-
-
 
 for (let [key, value] of Object.entries(routes)) {
   app.get(key, value);

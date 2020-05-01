@@ -1,3 +1,4 @@
+const mongo = require('./mongo');
 const assert = require('assert');
 const dbName = "PatientPortal";
 const collectionName = "Users";
@@ -26,32 +27,32 @@ class user {
  * @param {*} user - user object
  * @param {*} callback - function callback(success: bool)
  */
-function createUser(mongoClient, user) {
-    return new Promise((resolve, reject) => {
-        getUser(mongoClient, user).then((docs) => {
-            if (docs.length <= 0) {
-                mongoClient.connect((err) => {
-                    if (!err) {
-                        const db = mongoClient.db(dbName);
-                        // Get the documents collection
-                        const collection = db.collection(collectionName);
-                        collection.insertOne({ Username: user.username, Password: user.password, Options: user.options }, (err, r) => {
-                            if (!err && r.insertedCount == 1) {
-                                resolve(true);
-                            } else {
-                                console.error(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
-                                reject(false);
-                            }
-                        });
-                    } else {
-                        console.error(error);
-                        reject(false);
-                    }
-                });
+function createUser(user) {
+    return new Promise(async function (resolve, reject) {
+        // Check no other users exist with the same username
+        let docs = await getUser(mongoClient, user).catch((err) => {
+            reject(err);
+        });
+
+        if (docs.length < 1) {
+            let client = await mongo.client.connect(mongo.URL, mongo.options).catch((err) => {
+                reject(err);
+            });
+            let db = client.db(dbName);
+            // Get the documents collection
+            let = collection = db.collection(collectionName);
+            let result = await collection.insertOne({ Username: user.username, Password: user.password, Options: user.options }).catch((err) => {
+                reject(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
+            });
+
+            if (result.insertedCount == 1) {
+                resolve(true);
             } else {
-                reject(false);
+                reject("Inserted more than one documents");
             }
-        }).catch(reject);
+        } else {
+            reject(err);
+        }
     });
 } // => user
 
@@ -61,30 +62,19 @@ function createUser(mongoClient, user) {
  * @param {*} mongoClient 
  * @param {*} user 
  */
-function getUser(mongoClient, user) {
-    return new Promise((resolve, reject) => {
-        let mongoPromise = new Promise((resolve, reject) => {
-            mongoClient.connect((err) => {
-                if (!err) { 
-                    const db = mongoClient.db(dbName);
-                    // Get the documents collection
-                    const collection = db.collection(collectionName);
-                    // Find some documents
-                    collection.find({ Username: user.username }).toArray((err, docs) => {
-                        if (err) {
-                            console.error(err);
-                            reject(false)
-                        } else {
-                            resolve(docs);
-                        }
-                    });
-                } else {
-                    console.error(err);
-                    reject(false);
-                }
-            });
+function getUser(user) {
+    return new Promise(async function (resolve, reject) {
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch((err) => {
+            reject(err);
         });
-        mongoPromise.then(resolve).catch(reject);
+        let db = client.db(dbName);
+        // Get the documents collection
+        let collection = db.collection(collectionName);
+        // Find some documents
+        let docs = await collection.find({ Username: user.username }).toArray().catch((err) => {
+            reject(err)
+        });
+        resolve(docs);
     });
 } // => user
 
