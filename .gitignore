@@ -110,4 +110,4 @@ dist
 .idea/
 
 # compiled from babeljs
-src/public/scripts
+patientportal/public/scripts
