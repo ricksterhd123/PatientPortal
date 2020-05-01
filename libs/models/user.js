@@ -7,16 +7,16 @@ const collectionName = "Users";
  * User document object structure from database
  */
 class user {
-    constructor(user) {
-        this.username = user.username;
-        this.password = user.password;
-        this.options = user.options;
-    }
-
-    constructor(username, password, options) {
-        this.username = "" || username;
-        this.password = "" || password;
-        this.options = {} || options;
+    constructor(user, username, password, options) {
+        if (!this.user){
+            this.username = "" || username;
+            this.password = "" || password;
+            this.options = {} || options;
+        } else {
+            this.username = user.username;
+            this.password = user.password;
+            this.options = user.options;
+        }
     }
 }
 

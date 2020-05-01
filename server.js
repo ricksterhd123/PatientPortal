@@ -7,7 +7,7 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const userModel = require('./libs/models/user');
 const validator = require('./libs/validators');
-
+const routes = require('./libs/routes');
 const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 10;  // bcrypt salt rounds
@@ -55,13 +55,13 @@ app.get('*', function (req, res, next) {
   POST /api/login
   Basic authentication => JSON web token
 */
-app.post('/api/login', (req, res) => {
+async function login(req, res){
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
   let user = new userModel.user(username);
 
-  let docs = await userModel.getUser(client, user);
+  let docs = await userModel.getUser(_, client, user);
   if (docs) {
     if (docs.length < 1) {
       console.log("Incorrect");
@@ -82,35 +82,40 @@ app.post('/api/login', (req, res) => {
     }
   }
 
-});
+}
 
-app.post("/api/register", function (req, res) {
+app.post('/api/login', login);
+
+app.post("/api/register", async function (req, res) {
   var token = req.token;
   if (!token) {
     let username = req.body.username;
     let password = req.body.password;
-
-    let salt = await bcrypt.genSalt(saltRounds);
-    if (salt) {
-      let hash = await bcrypt.hash(password, salt)
-      if (hash) {
-        let user = new userModel.user(username, hash);
-        let success = await userModel.createUser(client, user);
-        if (success) {
+    if (validator.username(username) && validator.password(password)) {
+      let salt = await bcrypt.genSalt(saltRounds);
+      if (salt) {
+        let hash = await bcrypt.hash(password, salt)
+        if (hash) {
+          let user = new userModel.user(_, username, hash);
+          let success = await userModel.createUser(client, user);
           if (success) {
-            let token = jwt.sign({ username: user.username }, secret);
-            if (token) {
-              res.cookie('jwt', token, { httpOnly: true });
+            if (success) {
+              let token = jwt.sign({ username: user.username }, secret);
+              if (token) {
+                res.cookie('jwt', token, { httpOnly: true });
+              }
             }
+            res.send(JSON.stringify({ success: success }));
           }
-          res.send(JSON.stringify({ success: success }));
         }
       }
+    } else {
+      res.send(JSON.stringify({success: false}));
     }
   } else {
     res.send(JSON.stringify({ success: false }));
   }
-}
+});
 
 // GET /api/logout - removes jwt httponly cookie from browser then redirects to index
 app.get("/api/logout", function (req, res) {
@@ -118,55 +123,9 @@ app.get("/api/logout", function (req, res) {
   res.redirect("/");
 });
 
-// Routes which render views
-const routes = {};
 
-// req.isAuthenticated is provided from the auth router
-routes.index = function (req, res) {
-  let token = req.token;
-  res.render('home.pug', { title: "Home", name: token.username });
-};
 
-routes.register = function (req, res) {
-  let token = req.token;
-  if (token) {
-    res.redirect('/');
-  } else {
-    res.render('register.pug', { title: 'register' });
-  }
-};
-routes.login = function (req, res) {
-  res.render('login.pug', { title: 'login' });
-};
-
-routes.appointments = function (req, res) {
-  res.render('appointments.pug');
-};
-
-routes.contact = function (req, res) {
-  res.render('contact.pug');
-};
-
-routes.symptoms = function (req, res) {
-  res.render("symptoms.pug");
-};
-
-routes.settings = function (req, res) {
-  res.render("settings.pug");
-};
-
-// Bind each route to a callback function
-const r = {
-  "/": routes.index,
-  "/login": routes.login,
-  "/register": routes.register,
-  "/appointments": routes.appointments,
-  "/contact": routes.contact,
-  "/symptoms": routes.symptoms,
-  "/settings": routes.settings
-};
-
-for (let [key, value] of Object.entries(r)) {
+for (let [key, value] of Object.entries(routes)) {
   app.get(key, value);
 }
 
