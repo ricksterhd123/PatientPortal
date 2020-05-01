@@ -29,11 +29,11 @@ class User {
 function createUser(user) {
     return new Promise(async function (resolve, reject) {
         // Check no other users exist with the same username
-        let user = await getUser(user).catch((err) => {
+        let userExists = await getUser(user).catch((err) => {
             reject(err);
         });
 
-        if (!user) {
+        if (!userExists) {
             let client = await mongo.client.connect(mongo.URL, mongo.options).catch((err) => {
                 reject(err);
             });
@@ -80,8 +80,6 @@ function getUser(user) {
         }).toArray().catch((err) => {
             reject(err)
         });
-
-        console.log(docs);
         if (docs.length == 1){
             resolve(new User(docs[0]));
         } else {

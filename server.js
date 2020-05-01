@@ -62,15 +62,11 @@ app.post('/api/login', async function (req, res) {
   let [username, password] = decoded.split(":");
   var user = new userModel.User(null, username);
 
-  console.log(`Username: ${username} ${password} ${user}`);
   user = await userModel.getUser(user).catch((err) => {
     console.error(err);
   });
-
-  console.log(user);
   if (user) {
     let hash = user.password;
-    console.log(`Hash: ${hash}`);
     let result = await bcrypt.compare(password, hash);
     if (result) {
       res.cookie('jwt', jwt.sign({
