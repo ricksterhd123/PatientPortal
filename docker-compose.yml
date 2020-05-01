@@ -2,7 +2,7 @@ version: "3"
 services:
     nginx:
         restart: always
-        build: ./nginx
+        build: nginx/
         ports: 
             - "80:80"
             - "443:443"
@@ -11,7 +11,7 @@ services:
             - /etc/letsencrypt/live/ricksterhd123.studio/fullchain.pem:/etc/letsencrypt/live/ricksterhd123.studio/fullchain.pem
     app:
         restart: always
-        build: .
+        build: patientportal/
         ports:
             - "3000:3000"
         environment:
