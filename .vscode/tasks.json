@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "debug-docker",
+            "type": "shell",
+            "command": "docker-compose -f '.vscode/docker-compose.yml' up -d --build"
+        },
+        {
+            "label": "debug-docker-stop",
+            "type": "shell",
+            "command": "docker-compose -f '.vscode/docker-compose.yml' stop"
+        }
+    ]
+}

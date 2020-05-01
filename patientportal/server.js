@@ -10,6 +10,7 @@ const validator = require('./libs/validators');
 const routes = require('./libs/routes');
 const roles = require('./libs/roles');
 
+
 const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 10; // bcrypt salt rounds
@@ -27,7 +28,7 @@ app.use(bodyParser.urlencoded({
 // Parse application/json
 app.use(bodyParser.json());
 // Serve static files in /public
-app.use(express.static('public'));
+app.use(express.static("./public/"));
 
 // Middleware to verify if the jwt token is valid
 app.use(async function (req, res, next) {
