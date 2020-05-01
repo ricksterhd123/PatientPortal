@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Middleware to verify if the jwt token is valid
-app.use((req, res, next) => {
+app.use(async function (req, res, next) => {
   let token = req.cookies.jwt;
   if (token) {
     let valid = jwt.verify(token, secret);
@@ -34,14 +34,13 @@ app.use((req, res, next) => {
       req.token = valid;
     }
   }
-
   next();
 });
 
 // Redirect user to /login if they've not logged in yet
-app.get('*', function (req, res, next) {
+app.get('*', async function (req, res, next) {
   if (req.url === '/login' || req.url === '/register' || req.url === '/api/login' || req.url === '/api/register') {
-    return next();
+    next();
   } else {
     if (req.token) {
       next();
@@ -55,13 +54,13 @@ app.get('*', function (req, res, next) {
   POST /api/login
   Basic authentication => JSON web token
 */
-async function login(req, res){
+app.post('/api/login', async function login(req, res){
   let auth = req.header('authorization').replace("Basic", "");
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
   let user = new userModel.user(username);
 
-  let docs = await userModel.getUser(_, client, user);
+  let docs = await userModel.getUser(_, client, user).catch(() => {res.JSON.stringify({success:false})});
   if (docs) {
     if (docs.length < 1) {
       console.log("Incorrect");
@@ -82,9 +81,7 @@ async function login(req, res){
     }
   }
 
-}
-
-app.post('/api/login', login);
+});
 
 app.post("/api/register", async function (req, res) {
   var token = req.token;
@@ -92,23 +89,30 @@ app.post("/api/register", async function (req, res) {
     let username = req.body.username;
     let password = req.body.password;
     if (validator.username(username) && validator.password(password)) {
-      let salt = await bcrypt.genSalt(saltRounds);
-      if (salt) {
-        let hash = await bcrypt.hash(password, salt)
-        if (hash) {
-          let user = new userModel.user(_, username, hash);
-          let success = await userModel.createUser(client, user);
-          if (success) {
-            if (success) {
-              let token = jwt.sign({ username: user.username }, secret);
-              if (token) {
-                res.cookie('jwt', token, { httpOnly: true });
-              }
-            }
-            res.send(JSON.stringify({ success: success }));
-          }
+      let salt = await bcrypt.genSalt(saltRounds).catch((err) => {
+        console.error(err);
+        res.send(JSON.stringify({success:false}))
+      });
+
+      let hash = await bcrypt.hash(password, salt).catch((err) => {
+        console.error(err);
+        res.send(JSON.stringify({success: false}));
+      });
+
+      let user = new userModel.user(_, username, hash);
+      let success = await userModel.createUser(client, user).catch((success) => {
+        console.error("Could not create user because it exists");
+        res.send(JSON.stringify({success: false}));
+      });
+
+      if (success) {
+        let token = jwt.sign({ username: user.username }, secret);
+        if (token) {
+          res.cookie('jwt', token, { httpOnly: true });
         }
       }
+      res.send(JSON.stringify({ success: success }));
+
     } else {
       res.send(JSON.stringify({success: false}));
     }
@@ -118,7 +122,7 @@ app.post("/api/register", async function (req, res) {
 });
 
 // GET /api/logout - removes jwt httponly cookie from browser then redirects to index
-app.get("/api/logout", function (req, res) {
+app.get("/api/logout", async function (req, res) {
   res.clearCookie('jwt');
   res.redirect("/");
 });
