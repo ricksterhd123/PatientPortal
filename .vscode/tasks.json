@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "debug-docker",
+            "label": "preLaunch",
             "type": "shell",
-            "command": "docker-compose -f '.vscode/docker-compose.yml' up -d --build"
+            "command": "bash .vscode/preLaunch.sh"
         },
         {
-            "label": "debug-docker-stop",
+            "label": "postLaunch",
             "type": "shell",
             "command": "docker-compose -f '.vscode/docker-compose.yml' stop"
         }

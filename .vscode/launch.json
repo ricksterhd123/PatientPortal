@@ -11,8 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "preLaunchTask": "debug-docker",
-            "postDebugTask": "debug-docker-stop",
+            "preLaunchTask": "preLaunch",
+            "postDebugTask": "postLaunch",
             "env": {
                 "DEBUG": "true",
                 "PORT": "3000",
@@ -20,7 +20,7 @@
                 "pass": "example"
             },
             "cwd": "${workspaceFolder}/patientportal",
-            "program": "${workspaceFolder}/patientportal/server.js"
+            "program": "${workspaceFolder}/patientportal/server.js",
         }
     ]
 }
