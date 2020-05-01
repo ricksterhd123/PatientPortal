@@ -30,7 +30,7 @@ class user {
 function createUser(user) {
     return new Promise(async function (resolve, reject) {
         // Check no other users exist with the same username
-        let docs = await getUser(mongoClient, user).catch((err) => {
+        let docs = await getUser(user).catch((err) => {
             reject(err);
         });
 

@@ -25,11 +25,14 @@ class LoginPanel extends React.Component{
           if (xmlHttp.readyState === 4) {
             if (xmlHttp.status === 200) {
               console.log(xmlHttp.responseText);
-              let success = JSON.parse(xmlHttp.responseText).success;
+              let json = JSON.parse(xmlHttp.responseText)
+              let success = json.success;
+              let error = json.error;
+
               if (success){
-                  window.location.href = "/";
+                window.location.href = "/";
               } else {
-                  self.setState({success:false});
+                self.setState({success: success, error: error});
               }
             } else {
               console.error(xmlHttp.statusText);
@@ -46,7 +49,7 @@ class LoginPanel extends React.Component{
     render(){
         return <div>
                     <h1>The Nuffield Center GP</h1>
-                    <p>{this.state.success?"":"Failed to login please try again"}</p>
+                    <p>{this.state.success?"":this.state.error}</p>
                     <p>Username:</p>
                     <input type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
                     <p>Password:</p>

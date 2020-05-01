@@ -59,31 +59,27 @@ app.post('/api/login', async function (req, res){
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
   let user = new userModel.user(null, username);
-  console.log("call await")
   let docs = await userModel.getUser(user).catch((err) => {
     console.error(err);
   });
 
   if (docs) {
     if (docs.length < 1) {
-      console.log("Incorrect");
       res.send(JSON.stringify({
-        success: false
+        success: false, error: "Invalid username or password"
       }));
     } else {
       assert.equal(docs.length, 1); // Shouldn't be more than 1 
       let hash = docs[0].Password;
       console.log(`Hash: ${hash}`);
       let result = await bcrypt.compare(password, hash);
-      if (result) {
         if (result) {
           res.cookie('jwt', jwt.sign({ username: username }, secret), { httpOnly: true });
         }
-        res.send(JSON.stringify({ success: result }));
-      }
+        res.send(JSON.stringify({ success: result, error: result ? null : "Invalid username or password..." }));
     }
   } else {
-    res.send(JSON.stringify({success: false}));
+    res.send(JSON.stringify({success: false, error: "Error: come back later..."}));
   }
 
 });
@@ -93,16 +89,18 @@ app.post("/api/register", async function (req, res) {
   if (!token) {
     let username = req.body.username;
     let password = req.body.password;
-    if (validator.username(username) && validator.password(password)) {
+    let valid = validator.username(username) && validator.password(password);
+
+    if (valid) {
       let salt = await bcrypt.genSalt(saltRounds).catch((err) => {
         console.error(err);
-        res.send(JSON.stringify({success:false}))
+        res.send(JSON.stringify({success:false, error: "Come back again later..."}))
       });
 
       if (salt) {
         let hash = await bcrypt.hash(password, salt).catch((err) => {
           console.error(err);
-          res.send(JSON.stringify({success: false}));
+          res.send(JSON.stringify({success: false, error: "Come back again later..."}));
         });
         
         if (hash) {
@@ -117,15 +115,15 @@ app.post("/api/register", async function (req, res) {
               res.cookie('jwt', token, { httpOnly: true });
             }
           }
-          res.send(JSON.stringify({ success: success }));
+          res.send(JSON.stringify({ success: success, error: success ? null : "Failed to register, please try a different username"}));
         }
       }
 
     } else {
-      res.send(JSON.stringify({success: false}));
+      res.send(JSON.stringify({success: false, error: "Username must be alphanumeric characters only and password must be at least 5 characters in length"}));
     }
   } else {
-    res.send(JSON.stringify({ success: false }));
+    res.send(JSON.stringify({ success: false, error: "Already logged in" }));
   }
 });
 
