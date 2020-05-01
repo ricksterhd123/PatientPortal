@@ -1,7 +1,5 @@
-#! /bin/bash
-
 cd patientportal
 npm install
-babel views/components -d public/scripts
+npm run compile
 cd ..
 docker-compose -f .vscode/docker-compose.yml up -d --build
