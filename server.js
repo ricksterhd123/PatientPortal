@@ -4,10 +4,12 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 
-const assert = require('assert');
+// Libs
 const userModel = require('./libs/models/user');
 const validator = require('./libs/validators');
 const routes = require('./libs/routes');
+const roles = require('./libs/models/roles');
+
 const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 10; // bcrypt salt rounds
@@ -123,7 +125,8 @@ app.post("/api/register", async function (req, res) {
         });
 
         if (hash) {
-          let user = new userModel.User(null, username, hash);
+          let user = new userModel.User(null, username, hash, {role: roles.USER});
+          console.log(user.options);
           let success = await userModel.createUser(user).catch((err) => {
             console.error(err);
           });

@@ -39,3 +39,7 @@
     display: block;
     margin: 0 auto;
 }
+
+#admin-users, #admin-schedules, #admin-messages, #admin-appointments, #admin-settings{
+    background-color: orangered;
+}

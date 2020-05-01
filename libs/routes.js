@@ -1,10 +1,18 @@
+const userModel = require('./models/user');
 // Routes which render views
 const routes = {};
 
 // req.isAuthenticated is provided from the auth router
-routes.index = function (req, res) {
+routes.index = async function (req, res) {
   let token = req.token;
-  res.render('home.pug', { title: "Home", name: token.username });
+  var user = new userModel.User(null, token.username);
+
+  user = await userModel.getUser(user).catch((err) => {
+    console.error(err);
+    res.status(401).send("Error: could not get user with token");
+  });
+
+  res.render('home.pug', { title: "Home", name: token.username, role: user.options.role });
 };
 
 routes.register = function (req, res) {
@@ -15,6 +23,7 @@ routes.register = function (req, res) {
     res.render('register.pug', { title: 'register' });
   }
 };
+
 routes.login = function (req, res) {
   res.render('login.pug', { title: 'login' });
 };

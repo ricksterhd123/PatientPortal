@@ -10,9 +10,9 @@ const collectionName = "Users";
 class User {
     constructor(user, username, password, options) {
         if (!user) {
-            this.username = "" || username;
-            this.password = "" || password;
-            this.options = {} || options;
+            this.username = username || "";
+            this.password = password || "";
+            this.options = options || {};
         } else {
             this.username = user.username;
             this.password = user.password;
