@@ -1,6 +1,5 @@
-# PatientPortal
+# PatientPortal ![Node.js CI](https://github.com/ricksterhd123/PatientPortal/workflows/Node.js%20CI/badge.svg)
 
-![Node.js CI](https://github.com/ricksterhd123/PatientPortal/workflows/Node.js%20CI/badge.svg)
 A cross platform patient portal for UK-based general practitioners
 
 ## Background
