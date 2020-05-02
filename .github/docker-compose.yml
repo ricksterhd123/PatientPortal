@@ -13,7 +13,7 @@ services:
     app:
         restart: always
         build: 
-            context: ../../patientportal/
+            context: ../patientportal/
             dockerfile: test.Dockerfile
         ports:
             - "3000:3000"
