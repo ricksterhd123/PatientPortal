@@ -10,16 +10,3 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: example
-    app:
-        restart: always
-        build: 
-            context: ../patientportal/
-            dockerfile: test.Dockerfile
-        ports:
-            - "3000:3000"
-        environment:
-            PORT: 3000
-            user: root
-            pass: example
-        depends_on:
-            - mongo
