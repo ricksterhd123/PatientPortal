@@ -33,12 +33,20 @@ The software development of a web-based patient portal available to registered p
 If you want automated updates from github then use install script otherwise use docker-compose manually.
 
 ### Run manually
+
 ```bash
 docker-compose -f "docker-compose.yml" up -d --build
 ```
 
 ### Run the install script
+
 ```bash
 chmod +x install.sh
 ./install.sh
 ```
+
+### Run in visual studio code
+
+Note: must add 'C:\Program Files\Git\bin' to Path before 'C:\Windows\System32'.
+
+Run the launch.json file.
