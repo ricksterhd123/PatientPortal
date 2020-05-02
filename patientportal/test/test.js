@@ -7,7 +7,7 @@ const password = "password";
 
 
 describe('POST /api/register', function() {
-    it('responds with json', function() {
+    it('responds with json', function(done) {
         return request(app)
         .post('/api/register')
         .send({username: "test", password: "password"})
@@ -17,8 +17,10 @@ describe('POST /api/register', function() {
         .then(response => {
             assert.strictEqual(response.body.success, true);
             assert.strictEqual(response.body.error, null);
+            done();
         }).catch(err => {
-            assert.strictEqual(err, null);
+            //assert.strictEqual(err, null);
+            done(err);
         });
     })
 });
