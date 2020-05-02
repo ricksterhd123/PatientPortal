@@ -1,4 +1,6 @@
 process.env.TEST = true;
+process.env.DEBUG = true;
+
 const app = require('../server');
 const assert = require('assert');
 const request = require('supertest');

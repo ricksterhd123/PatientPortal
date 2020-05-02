@@ -32,4 +32,3 @@ jobs:
         user: ${{ secrets.user }}
         pass: ${{ secrets.pass }}
         PORT: 3000
-        DEBUG: "true"
