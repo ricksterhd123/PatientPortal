@@ -10,7 +10,7 @@ const password = "password";
 
 
 describe('POST /api/register', function() {
-    it('responds with json', function(done) {
+    it('responds with json', function() {
         return request(app)
         .post('/api/register')
         .send({username: "test", password: "password"})

@@ -182,6 +182,8 @@ for (let [key, value] of Object.entries(routes)) {
 }
 
 // Start server
-app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
-
+if (!process.env.TEST)
+{
+  app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+}
 module.exports = app;
