@@ -1,10 +1,23 @@
-let assert = require('assert');
+const app = require('../server');
+const assert = require('assert');
+const request = require('supertest');
 const {describe, it} = require("mocha");
+const username = "test";
+const password = "password";
 
-describe('Array', function() {
-    describe('#indexOf()', function() {
-        it('should return -1 when the value is not present', function() {
-            assert.equal([1, 2, 3].indexOf(1), 0);
-        });
-    });
+
+describe('POST /api/register', function() {
+    it('responds with json', function() {
+        return request(app)
+        .post('/api/register')
+        .send({username: "test", password: "password"})
+        .set('Accept', 'application/json')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200)
+        .then(response => {
+            assert.strictEqual(response.body.success, true);
+            assert.strictEqual(response.body.error, null);
+        })
+        .catch(console.error);
+    })
 });

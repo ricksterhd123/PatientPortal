@@ -5,4 +5,4 @@ RUN apk --no-cache add --virtual builds-deps build-base python
 RUN npm install
 COPY . .
 RUN npm run compile
-CMD npm start
+CMD npm test

@@ -14,7 +14,7 @@
             "preLaunchTask": "preLaunch",
             "postDebugTask": "postLaunch",
             "env": {
-                "DEBUG": "true",
+                "test": "true",
                 "PORT": "3000",
                 "user": "root",
                 "pass": "example"

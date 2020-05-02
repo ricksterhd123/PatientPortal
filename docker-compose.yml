@@ -17,7 +17,7 @@ services:
         environment:
             PORT: 3000
             user: root
-            pass: example   
+            pass: example
     mongo:
         image: mongo
         restart: always

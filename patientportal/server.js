@@ -76,15 +76,15 @@ app.post('/api/login', async function (req, res) {
       });
     }
 
-    res.send(JSON.stringify({
+    res.json({
       success: result,
       error: result ? null : "Invalid username or password..."
-    }));
+    });
   } else {
-    res.send(JSON.stringify({
+    res.json({
       success: false,
       error: "Invalid username or password..."
-    }));
+    });
   }
 });
 
@@ -107,19 +107,19 @@ app.post("/api/register", async function (req, res) {
     if (valid) {
       let salt = await bcrypt.genSalt(saltRounds).catch((err) => {
         console.trace(err);
-        res.send(JSON.stringify({
+        res.json({
           success: false,
           error: "Come back again later..."
-        }))
+        });
       });
 
       if (salt) {
         let hash = await bcrypt.hash(password, salt).catch((err) => {
           console.trace(err);
-          res.send(JSON.stringify({
+          res.json({
             success: false,
             error: "Come back again later..."
-          }));
+          });
         });
 
         if (hash) {
@@ -149,24 +149,24 @@ app.post("/api/register", async function (req, res) {
             }
           }
 
-          res.send(JSON.stringify({
+          res.json({
             success: success,
             error: success ? null : "Failed to register, please try a different username"
-          }));
+          });
         }
       }
 
     } else {
-      res.send(JSON.stringify({
+      res.json({
         success: false,
         error: "Username must be alphanumeric characters only and password must be at least 5 characters in length"
-      }));
+      });
     }
   } else {
-    res.send(JSON.stringify({
+    res.json({
       success: false,
       error: "Already logged in"
-    }));
+    });
   }
 });
 
@@ -181,5 +181,7 @@ for (let [key, value] of Object.entries(routes)) {
   app.get(key, value);
 }
 
-// Start server
-app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+// // Start server
+// app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+
+module.exports = app;

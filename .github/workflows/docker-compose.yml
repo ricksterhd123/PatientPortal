@@ -1,0 +1,25 @@
+# Used with github actions only...
+version: "3"
+services:
+    mongo:
+        image: mongo
+        restart: always
+        # todo: volumes later
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+    app:
+        restart: always
+        build: 
+            context: ../../patientportal/
+            dockerfile: test.Dockerfile
+        ports:
+            - "3000:3000"
+        environment:
+            PORT: 3000
+            user: root
+            pass: example
+        depends_on:
+            - mongo
