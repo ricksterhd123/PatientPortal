@@ -1,5 +1,5 @@
 #! /bin/bash
-docker-compose -f .vscode/docker-compose.yml stop
+docker-compose -f .vscode/docker-compose.yml down
 # cd patientportal
 # echo "Cleaning up ..."
 # for file in 'public/scripts'/*; do
