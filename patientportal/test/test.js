@@ -1,3 +1,4 @@
+process.env.TEST = true;
 const app = require('../server');
 const assert = require('assert');
 const request = require('supertest');
