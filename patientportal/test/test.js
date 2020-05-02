@@ -17,6 +17,9 @@ describe('POST /api/register', function() {
         .then(response => {
             assert.strictEqual(response.body.success, true);
             assert.strictEqual(response.body.error, null);
-        });
+        })
+        .catch(err => {
+            assert.strictEqual(err, null);
+        })
     })
 });
