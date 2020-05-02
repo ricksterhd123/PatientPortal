@@ -28,3 +28,8 @@ jobs:
     - run: npm --prefix patientportal/ ci
     - run: npm --prefix patientportal/ run build --if-present
     - run: npm --prefix patientportal/ test
+      env:
+        user: ${{ secrets.user }}
+        pass: ${{ secrets.pass }}
+        PORT: 3000
+        DEBUG: "true"
