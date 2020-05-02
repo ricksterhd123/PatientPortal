@@ -181,7 +181,7 @@ for (let [key, value] of Object.entries(routes)) {
   app.get(key, value);
 }
 
-// // Start server
-// app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
+// Start server
+app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
 
 module.exports = app;
