@@ -33,7 +33,7 @@ describe('Checking if authentication works', function() {
     it('User can login', function() {
         return agent
         .post('/api/register')
-        .set("Authorization", "Basic " + btoa(username+":"+password))
+        .set("Authorization", "Basic " + Buffer.from(username+":"+password).toString('base64'))
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(200)
