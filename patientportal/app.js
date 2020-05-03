@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
@@ -16,6 +17,7 @@ const saltRounds = 10; // bcrypt salt rounds
 const secret = "shhhh"; // JWT secret (temporary until i figure out how to create HMAC SHA256 key)
 
 // Setup pug template engine
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug');
 // Setup cookie parser for HttpOnly cookies
 app.use(cookieParser());
@@ -26,7 +28,7 @@ app.use(bodyParser.urlencoded({
 // Parse application/json
 app.use(bodyParser.json());
 // Serve static files in /public
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to verify if the jwt token is valid
 app.use(async function (req, res, next) {
@@ -181,9 +183,4 @@ for (let [key, value] of Object.entries(routes)) {
   app.get(key, value);
 }
 
-// Start server
-if (!process.env.TEST)
-{
-  app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
-}
 module.exports = app;

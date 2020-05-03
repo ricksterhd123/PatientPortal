@@ -19,8 +19,8 @@
                 "user": "root",
                 "pass": "example"
             },
-            "cwd": "${workspaceFolder}/patientportal",
-            "program": "${workspaceFolder}/patientportal/server.js",
+            "cwd": "${workspaceFolder}/patientportal/bin/",
+            "program": "${workspaceFolder}/patientportal/bin/server.js",
         }
     ]
 }
