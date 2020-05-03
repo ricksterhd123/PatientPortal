@@ -13,7 +13,13 @@ routes.index = async function (req, res) {
       console.trace(err);
       res.status(401).send("Error: could not get user with token");
     });
-    res.render('home.pug', { title: "Home", name: token.username, role: user.options.role });
+
+    if (user) {
+      res.render('home.pug', { title: "Home", name: token.username, role: user.options.role });
+    } else {
+      // jwt that is set is not valid, remove it:
+      res.redirect("/api/logout");
+    }
   }
 };
 
