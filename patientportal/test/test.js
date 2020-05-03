@@ -14,35 +14,35 @@ describe('Checking if authentication works', function() {
     const password = "password";
     //const agent = request.agent(app);
 
-    it('User can register', function() {
-        return request(app)
-        .post('/api/register')
-        .send({username: username, password: password})
-        .set('Accept', 'application/json')
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200)
-        .then(response => {
+    it('User can register', async function() {
+        try {
+            const response = await request(app)
+                .post('/api/register')
+                .send({ username: username, password: password })
+                .set('Accept', 'application/json')
+                .expect('Content-Type', 'application/json; charset=utf-8')
+                .expect(200);
             assert.strictEqual(response.body.success, true);
             assert.strictEqual(response.body.error, null);
-        })
-        .catch(err => {
+        }
+        catch (err) {
             assert.strictEqual(err, null);
-        });
+        }
     });
 
-    it('User can login', function() {
-        return request(app)
-        .post('/api/login')
-        .set("Authorization", "Basic " + Buffer.from(username+":"+password).toString('base64'))
-        .set('Accept', 'application/json')
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200)
-        .then(response => {
+    it('User can login', async function() {
+        try {
+            const response = await request(app)
+                .post('/api/login')
+                .set("Authorization", "Basic " + Buffer.from(username + ":" + password).toString('base64'))
+                .set('Accept', 'application/json')
+                .expect('Content-Type', 'application/json; charset=utf-8')
+                .expect(200);
             assert.strictEqual(response.body.success, true);
             assert.strictEqual(response.body.error, null);
-        })
-        .catch(err => {
+        }
+        catch (err) {
             assert.strictEqual(err, null);
-        });
+        }
     });
 });
