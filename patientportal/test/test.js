@@ -1,5 +1,5 @@
-process.env.TEST = true;
-process.env.DEBUG = true;
+process.env.TEST = true;    // Set true when testing
+process.env.DEBUG = true;   // Set true for testing || debugging
 
 const app = require('../server');
 const assert = require('assert');
