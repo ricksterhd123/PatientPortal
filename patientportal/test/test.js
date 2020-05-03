@@ -1,6 +1,6 @@
 process.env.DEBUG = true;   // Set true for debugging || testing
 
-const app = require('../server');
+const app = require('../app');
 const assert = require('assert');
 const request = require('supertest');
 const {describe, it} = require("mocha");
