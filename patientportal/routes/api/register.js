@@ -50,22 +50,22 @@ router.post('/', async function (req, res) {
                         role = roles.ADMIN;
                     }
 
+                    let success = false;
                     let user = new userModel.User(null, username, hash, { role: role });
-                    var success = await userModel.createUser(user).catch(console.trace);
+                    user = await userModel.createUser(user).catch(console.trace);
 
-                    if (success) {
+                    if (user) {
                         let token = jwt.sign({
                             username: user.username
                         }, JWTSecret);
 
                         if (token) {
+                            success = true;
                             res.cookie('jwt', token, {
                                 httpOnly: true
                             });
-
                         } else {
                             console.trace("Could not create token");
-                            success = false;
                         }
                     }
 

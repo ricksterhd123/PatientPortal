@@ -4,15 +4,11 @@ const app = require('../app');
 const assert = require('assert');
 const request = require('supertest');
 const {describe, it} = require("mocha");
+const username = 'test';
+const password = 'password';
 
-/**
- * Test POST /api/login
- */
 describe('Checking if authentication works', function() {
-    const username = "test";
-    const password = "password";
     //const agent = request.agent(app);
-
     it('User can register', async function() {
         try {
             const response = await request(app)
@@ -44,4 +40,12 @@ describe('Checking if authentication works', function() {
             assert.strictEqual(err, null);
         }
     });
+
+    
 });
+
+// TODO
+// describe('Checking if messages work', function() {
+//     const agent = request.agent(app);
+//     it('Can send message', async function)
+// });
