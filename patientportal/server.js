@@ -62,7 +62,7 @@ app.post('/api/login', async function (req, res) {
   let decoded = Buffer.from(auth, 'base64').toString();
   let [username, password] = decoded.split(":");
   var user = new userModel.User(null, username);
-  user = await userModel.getUser(user).catch(console.trace(err));
+  user = await userModel.getUser(user).catch(console.trace);
 
   if (user) {
     let hash = user.password;
