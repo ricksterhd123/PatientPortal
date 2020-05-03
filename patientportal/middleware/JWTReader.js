@@ -1,3 +1,4 @@
+// todo: use private key
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const JWTSecret = require('../libs/secrets').JWTSecret;
