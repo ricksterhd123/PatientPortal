@@ -6,8 +6,10 @@ const assert = require('assert');
 const request = require('supertest');
 const {describe, it} = require("mocha");
 
-
-describe('POST /api/login', function() {
+/**
+ * Test POST /api/login
+ */
+describe('Checking if authentication works', function() {
     const username = "test";
     const password = "password";
     const agent = request.agent(app);
