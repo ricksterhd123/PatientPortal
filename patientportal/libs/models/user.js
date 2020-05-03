@@ -44,9 +44,8 @@ function createUser(user) {
                 reject(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
             });
 
-            // resolve new User ??
             if (result.insertedCount == 1) {
-                resolve(true);
+                resolve(user);
             } else {
                 reject("Inserted more than one documents");
             }
