@@ -12,10 +12,10 @@ const {describe, it} = require("mocha");
 describe('Checking if authentication works', function() {
     const username = "test";
     const password = "password";
-    const agent = request.agent(app);
+    //const agent = request.agent(app);
 
     it('User can register', function() {
-        return agent
+        return request(app)
         .post('/api/register')
         .send({username: username, password: password})
         .set('Accept', 'application/json')
@@ -31,7 +31,7 @@ describe('Checking if authentication works', function() {
     });
 
     it('User can login', function() {
-        return agent
+        return request(app)
         .post('/api/login')
         .set("Authorization", "Basic " + Buffer.from(username+":"+password).toString('base64'))
         .set('Accept', 'application/json')
