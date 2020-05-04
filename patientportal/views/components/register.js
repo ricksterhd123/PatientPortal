@@ -26,14 +26,15 @@ class RegisterPanel extends React.Component{
             if (xmlHttp.status === 200) {
               console.log(xmlHttp.responseText);
               let json = JSON.parse(xmlHttp.responseText);
-              let success = json.success;
+              let result = json.result;
               let error = json.error;
-
-              if (success){
-                  window.location.href = "/";
-              } else {
-                  self.setState({success: success, error: error});
+              
+              if (result){
+                  window.location.href = "/";   
               }
+
+              // For now we just expect a boolean
+              self.setState({success: result && true || false, error: error});
             } else {
               console.error(xmlHttp.statusText);
             }

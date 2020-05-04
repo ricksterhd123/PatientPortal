@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const userModel = require('../../libs/models/user');
+
 const JWTSecret = require('../../libs/secrets').JWTSecret;
 
 const router = express.Router();
@@ -15,28 +16,30 @@ router.post('/', async function (req, res) {
     let auth = req.header('authorization').replace("Basic", "");
     let decoded = Buffer.from(auth, 'base64').toString();
     let [username, password] = decoded.split(":");
-    var user = new userModel.User(null, username);
+    let result = null;
+    let user = new userModel.User(null, username);
     user = await userModel.getUser(user).catch(console.trace);
 
     if (user) {
         let hash = user.password;
-        let result = await bcrypt.compare(password, hash);
+        let valid = await bcrypt.compare(password, hash);
 
-        if (result) {
+        if (valid) {
             res.cookie('jwt', jwt.sign({
                 username: username
             }, JWTSecret), {
                 httpOnly: true
             });
+            result = {username: user.username, role: user.role};
         }
 
         res.json({
-            success: result,
+            result: result,
             error: result ? null : "Invalid username or password..."
         });
     } else {
         res.json({
-            success: false,
+            result: result,
             error: "Invalid username or password..."
         });
     }

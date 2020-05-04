@@ -18,7 +18,8 @@ const router = express.Router();
  * }
  */
 router.post('/', async function (req, res) {
-    var token = req.token;
+    let token = req.token;
+    let result = null;
     if (!token) {
         let username = req.body.username;
         let password = req.body.password;
@@ -28,7 +29,7 @@ router.post('/', async function (req, res) {
             let salt = await bcrypt.genSalt(saltRounds).catch((err) => {
                 console.trace(err);
                 res.json({
-                    success: false,
+                    result: result,
                     error: "Come back again later..."
                 });
             });
@@ -37,7 +38,7 @@ router.post('/', async function (req, res) {
                 let hash = await bcrypt.hash(password, salt).catch((err) => {
                     console.trace(err);
                     res.json({
-                        success: false,
+                        result: result,
                         error: "Come back again later..."
                     });
                 });
@@ -50,7 +51,7 @@ router.post('/', async function (req, res) {
                         role = roles.ADMIN;
                     }
 
-                    let success = false;
+                    let result = null;
                     let user = new userModel.User(null, username, hash, { role: role });
                     user = await userModel.createUser(user).catch(console.trace);
 
@@ -60,7 +61,7 @@ router.post('/', async function (req, res) {
                         }, JWTSecret);
 
                         if (token) {
-                            success = true;
+                            result = {username:user.username, role:user.role};
                             res.cookie('jwt', token, {
                                 httpOnly: true
                             });
@@ -70,21 +71,21 @@ router.post('/', async function (req, res) {
                     }
 
                     res.json({
-                        success: success,
-                        error: success ? null : "Failed to register, please try a different username"
+                        result: result,
+                        error: result ? null : "Failed to register, please try a different username"
                     });
                 }
             }
 
         } else {
             res.json({
-                success: false,
+                result: result,
                 error: "Username must be alphanumeric characters only and password must be at least 5 characters in length"
             });
         }
     } else {
         res.json({
-            success: false,
+            result: result,
             error: "Already logged in"
         });
     }
