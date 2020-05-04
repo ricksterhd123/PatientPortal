@@ -14,7 +14,7 @@ let accounts = {
         username: 'clinician',
         password: 'password'
     },
-    Admin: {
+    admin: {
         username: 'admin',
         password: 'password'
     }
