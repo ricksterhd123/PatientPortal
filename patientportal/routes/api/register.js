@@ -61,7 +61,7 @@ router.post('/', async function (req, res) {
                         }, JWTSecret);
 
                         if (token) {
-                            result = {username:user.username, role:user.role};
+                            result = {username:user.username, role:user.options.role};
                             res.cookie('jwt', token, {
                                 httpOnly: true
                             });

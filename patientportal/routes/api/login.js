@@ -30,7 +30,7 @@ router.post('/', async function (req, res) {
             }, JWTSecret), {
                 httpOnly: true
             });
-            result = {username: user.username, role: user.role};
+            result = {username: user.username, role: user.options.role};
         }
 
         res.json({
