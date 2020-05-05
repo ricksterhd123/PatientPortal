@@ -53,15 +53,18 @@ class LoginPanel extends React.Component{
         return <div>
                     <h1>The Nuffield Center GP</h1>
                     <Warning errorMsg={this.state.error}/>
+
                     <div class='form-group'>
                       <label for="input-username">Username</label>
                       <input id="input-username" class="form-control" type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
                     </div>
+
                     <div class='form-group'>
                       <label for='input-password'>Password</label>
                       <input type="password" class='form-control' id='input-password' name="password" aria-describedby='register-help' onChange={this.passInputHandle}></input>
                       <small id="register-help" class="form-text text-muted"><a href="/register">Not logged in?</a></small>
                     </div>
+                    
                     <button type="submit" value="Login" class="btn btn-primary" onClick={this.submitHandle}>Login</button>
                 </div>
     }

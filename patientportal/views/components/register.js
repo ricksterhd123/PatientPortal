@@ -35,6 +35,9 @@ class RegisterPanel extends React.Component{
 
               // For now we just expect a boolean
               self.setState({success: result && true || false, error: error});
+              setTimeout(self => {
+                self.setState({success: true, error: null});
+              }, 3000, self);
             } else {
               console.error(xmlHttp.statusText);
             }
@@ -52,17 +55,26 @@ class RegisterPanel extends React.Component{
     render(){
         return <div>
                     <h1>The Nuffield Center GP</h1>
-                    <p>{this.state.success?"":this.state.error}</p>
-                    <p>WARNING: This is for demonstration purposes only, please use at your own risk!</p>
-                    <p>Username:</p>
-                    <input type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
-                    <p>Password:</p>
-                    <input type="password" name="password" onChange={this.passInputHandle}></input>
-                    <p>Repeat password:</p>
-                    <input type="password" name="repeat password"></input>
-                    <button type="submit" value="Login" onClick={this.submitHandle}>Register</button>
-                    <p>Already registered?</p>
-                    <a href="/login">Login</a>
+                    <Warning errorMsg="Please use at your own risk!"/>
+                    <Warning errorMsg={this.state.error}/>
+                    
+                    <div class='form-group'>
+                      <label for='input-username'>Username</label>
+                      <input id='input-username' class='form-control' type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
+                    </div>
+
+                    <div class='form-group'>
+                      <label for='input-password'>Password</label>
+                      <input id='input-password' class='form-control' type="password" name="password" onChange={this.passInputHandle}></input>
+                    </div>
+                    
+                    <div class='form-group'>
+                      <label for='input-repeat-password'>Repeat password</label>
+                      <input id='input-repeat-password' class='form-control' type="password" name="repeat password" aria-describedby='login-help'></input>
+                      <small id="login-help" class="form-text text-muted"><a href="/login">Already registered?</a></small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" value="Login" onClick={this.submitHandle}>Register</button>
                 </div>
     }
 }
