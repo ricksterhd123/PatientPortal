@@ -54,7 +54,7 @@ class RegisterPanel extends React.Component{
 
     render(){
         return <div>
-                    <h1>The Nuffield Center GP</h1>
+                    <h1>{this.props.title}</h1>
                     <Warning errorMsg="Please use at your own risk!"/>
                     <Warning errorMsg={this.state.error}/>
                     
@@ -80,7 +80,7 @@ class RegisterPanel extends React.Component{
 }
 
 function showRegisterPanel(){
-    const element = <RegisterPanel/>;
+    const element = <RegisterPanel title="The Nuffield Center GP"/>;
     ReactDOM.render(element, document.getElementById("menu"));
 }
 

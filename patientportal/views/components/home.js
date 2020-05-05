@@ -1,10 +1,12 @@
 class IndexNavigation extends React.Component {
+    
     render(){
-        return <div id="links">
-                <a id="appointments" className="big-button" href="/appointments">Appointments</a>
-                <a id="contact" className="big-button" href="/contact">Contact GP</a>
-                <a id="symptoms" className="big-button" href="https://www.google.com/">Symptom search</a>
-                <a id="settings" className="big-button" href="/settings">Settings</a>
+        return <div class="center container btn-group-vertical">
+                <button type="button" class="center btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/appointments"}}>Appointments</button>
+                <button type="button" class="center btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/contact"}}>Contact GP</button>
+                <button type="button" class="center btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/symptoms"}}>Symptom search</button>
+                <button type="button" class="center btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/settings"}}>Settings</button>
+                <button type="button" class="center btn btn-danger btn-lg btn-block" onClick={()=>{window.location.href = "/api/logout"}}>Logout</button>
             </div>
     }
 }

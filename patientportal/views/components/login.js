@@ -51,7 +51,7 @@ class LoginPanel extends React.Component{
 
     render(){
         return <div>
-                    <h1>The Nuffield Center GP</h1>
+                    <h1>{this.props.title}</h1>
                     <Warning errorMsg={this.state.error}/>
 
                     <div class='form-group'>
@@ -71,7 +71,7 @@ class LoginPanel extends React.Component{
 }
 
 function showLoginPanel(){
-    const element = <LoginPanel/>;
+    const element = <LoginPanel title="The Nuffield Centre GP"/>;
     ReactDOM.render(element, document.getElementById("menu"));
 }
 

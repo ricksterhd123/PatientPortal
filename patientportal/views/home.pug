@@ -4,8 +4,7 @@ block append styles
   link(rel='stylesheet' type='text/css' href='/styles/home.css')
 
 block append content
-  h1 Nuffield health center GP
-  h2 Welcome #{name}
+  h1#page-title The Nuffield Centre
   - if (role == 'admin')
     div#admin-menu
     script(src='/scripts/admin.js')
@@ -17,5 +16,4 @@ block append content
     script(src='/scripts/home.js')
 
 block append footer
-  p Role: #{role}
-  a(id="logout" href="/api/logout") Logout
+  p#user-log Logged in as #{name}
