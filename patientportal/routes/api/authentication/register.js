@@ -1,10 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const userModel = require('../../libs/models/user');
-const roles = require('../../libs/roles');
-const validator = require('../../libs/validators');
-const JWTSecret = require('../../libs/secrets').JWTSecret;
+const userModel = require('../../../libs/models/user');
+const roles = require('../../../libs/roles');
+const validator = require('../../../libs/validators');
+const JWTSecret = require('../../../libs/secrets').JWTSecret;
 const saltRounds = 10;
 const router = express.Router();
 
