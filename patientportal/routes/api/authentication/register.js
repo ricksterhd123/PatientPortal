@@ -23,7 +23,7 @@ router.post('/', async function (req, res) {
     if (!token) {
         let username = req.body.username;
         let password = req.body.password;
-        let valid = validator.username(username) && validator.password(password);
+        let valid = username && password && validator.username(username) && validator.password(password);
 
         if (valid) {
             let salt = await bcrypt.genSalt(saltRounds).catch((err) => {
