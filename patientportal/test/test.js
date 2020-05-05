@@ -1,4 +1,4 @@
-process.env.DEBUG = true;   // Set true for debugging || testing
+process.env.DEBUG = "true";   // Set true for debugging || testing
 
 const app = require('../app');
 const roles = require('../libs/roles');
