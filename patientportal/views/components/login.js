@@ -26,13 +26,13 @@ class LoginPanel extends React.Component{
             if (xmlHttp.status === 200) {
               console.log(xmlHttp.responseText);
               let json = JSON.parse(xmlHttp.responseText)
-              let success = json.success;
+              let result = json.result;
               let error = json.error;
 
-              if (success){
+              if (result){
                 window.location.href = "/";
               } else {
-                self.setState({success: success, error: error});
+                self.setState({success: result && true || false, error: error});
               }
             } else {
               console.error(xmlHttp.statusText);
