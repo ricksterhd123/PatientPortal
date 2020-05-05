@@ -1,1 +1,8 @@
 extends layout.pug
+
+block append styles
+block append content
+    div#messages
+    script(src='/scripts/ajax.js')
+    script(src='/scripts/contacts.js')
+block append footer

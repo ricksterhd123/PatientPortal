@@ -17,8 +17,7 @@ router.post('/', async function (req, res) {
     let decoded = Buffer.from(auth, 'base64').toString();
     let [username, password] = decoded.split(":");
     let result = null;
-    let user = new userModel.User(null, username);
-    user = await userModel.getUser(user).catch(console.trace);
+    let user = await userModel.getUser(username).catch(console.trace);
 
     if (user) {
         let hash = user.password;
@@ -26,7 +25,8 @@ router.post('/', async function (req, res) {
 
         if (valid) {
             res.cookie('jwt', jwt.sign({
-                username: username
+                id: user._id,
+                role: user.role
             }, JWTSecret), {
                 httpOnly: true
             });

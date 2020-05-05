@@ -3,30 +3,12 @@ const assert = require('assert');
 const dbName = "PatientPortal";
 const collectionName = "Users";
 
-
-/**
- * User document object structure from database
- */
-class User {
-    constructor(user, username, password, options) {
-        if (!user) {
-            this.username = username || "";
-            this.password = password || "";
-            this.options = options || {};
-        } else {
-            this.username = user.username;
-            this.password = user.password;
-            this.options = user.options;
-        }
-    }
-}
-
 /**
  * Create a user if not exists and returns promise.
  * @param {*} user - user object
  * @returns Promise
  */
-function createUser(user) {
+function createUser(username, password, options) {
     return new Promise(async function (resolve, reject) {
         // Check no other users exist with the same username
         let userExists = await getUser(user).catch(reject);
@@ -37,15 +19,15 @@ function createUser(user) {
             // Get the documents collection
             let = collection = db.collection(collectionName);
             let result = await collection.insertOne({
-                username: user.username,
-                password: user.password,
-                options: user.options
+                username: username,
+                password: password,
+                options: options
             }).catch((err) => {
                 reject(err || `Error: Inserted ${r.insertedCount-1} documents instead of 1`);
             });
 
             if (result.insertedCount == 1) {
-                resolve(user);
+                resolve(result.insertedId);
             } else {
                 reject("Inserted more than one documents");
             }
@@ -58,10 +40,10 @@ function createUser(user) {
 /**
  * Find user returns promise,
  * note: resolve given false is no user is found
- * @param {*} user - A user object, needs at least a username
+ * @param {string} username - The username of the user to find.
  * @returns Promise 
  */
-function getUser(user) {
+function getUser(username) {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
         let db = client.db(dbName);
@@ -69,16 +51,16 @@ function getUser(user) {
         let collection = db.collection(collectionName);
         // Find some documents
         let docs = await collection.find({
-            username: user.username
+            username: username
         }).toArray().catch(reject);
 
         if (docs.length == 1){
-            resolve(new User(docs[0]));
+            resolve(docs[0]);
         } else {
             resolve(false);
         }
     });
-} // => user
+}
 
 function getNumberOfUsers() {
     return new Promise(async function (resolve, reject) {
@@ -95,7 +77,6 @@ function updateUser(user) {} // => bool
 function deleteUser(user) {} // => bool
 
 module.exports = {
-    User,
     createUser,
     getUser,
     getNumberOfUsers

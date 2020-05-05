@@ -18,7 +18,7 @@ class LoginPanel extends React.Component{
     submitHandle(event) {
         let xmlHttp = new XMLHttpRequest();
         let self = this;
-        xmlHttp.open( "POST", "/api/login", false);
+        xmlHttp.open( "POST", "/api/login", true);
         xmlHttp.setRequestHeader("Authorization", "Basic " + btoa(this.state.username+":"+this.state.password));
         xmlHttp.onload = function (e) {
           if (xmlHttp.readyState === 4) {

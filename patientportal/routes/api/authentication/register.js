@@ -52,16 +52,16 @@ router.post('/', async function (req, res) {
                     }
 
                     let result = null;
-                    let user = new userModel.User(null, username, hash, { role: role });
-                    user = await userModel.createUser(user).catch(console.trace);
+                    let userID = await userModel.createUser(username, hash, { role: role }).catch(console.trace);
 
-                    if (user) {
+                    if (userID) {
                         let token = jwt.sign({
-                            username: user.username
+                            id: userID,
+                            role: role
                         }, JWTSecret);
 
                         if (token) {
-                            result = {username:user.username, role:user.options.role};
+                            result = {username: username, role: role};
                             res.cookie('jwt', token, {
                                 httpOnly: true
                             });

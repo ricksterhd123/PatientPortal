@@ -6,8 +6,9 @@ const cookieParser = require('cookie-parser');
 
 // Libs
 const JWTReader = require('./middleware/JWTReader');
-const routes = require('./libs/routes');
+
 const api = require('./routes/').api;
+const views = require('./routes/').views;
 
 // Setup
 const app = express();
@@ -51,9 +52,31 @@ app.use('/api/login', api.login);
 app.use("/api/register", api.register);
 app.use("/api/logout", api.logout);
 
-// Serve views
-for (let [key, value] of Object.entries(routes)) {
-  app.get(key, value);
-}
+app.get('/api/contacts', function(req, res) {
+
+});
+
+app.get("/api/messages", function(req, res) {
+  if (req.token) {
+    res.send({result: {
+        messages: [ 
+          {id:0, text: "Hello world"}, 
+          {id:1, text: "Wew"}, 
+          {id:2, text: "OMG!"}
+        ]
+      }
+    });
+  }
+});
+
+// VIEWS
+
+app.use('/', views.index);
+app.use('/login', views.login);
+app.use('/register', views.register);
+app.use('/appointments', views.appointments);
+app.use('/contact', views.messages);
+app.use('/symptoms', views.symptoms);
+app.use('/settings', views.settings);
 
 module.exports = app;
