@@ -1,7 +1,10 @@
 let api = {};
-api.login = require('./api/authentication/login');
-api.register = require('./api/authentication/register');
-api.logout = require('./api/authentication/logout');
+api.auth = {}
+api.auth.login = require('./api/authentication/login');
+api.auth.register = require('./api/authentication/register');
+api.auth.logout = require('./api/authentication/logout');
+api.messages = {};
+api.messages.contacts = require('./api/message/contacts');
 
 let views = {};
 views.index = require('./views/home');

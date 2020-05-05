@@ -1,23 +1,21 @@
-function Message(props) {
-    return <p className={props.className}>{props.text}</p>;
+function Contact(props) {
+    return <a id={props.id} className={props.className} href={props.href}>{props.text}</a>;
 }
 
-class Messages extends React.Component {
+class Contacts extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
-        this.state = {messageList: []};
+        this.state = {list: []};
     }
 
-    async getMessages(){
+    async get(){
         try {
-            let response = await HttpRequest("GET", "/api/messages", []);
-            console.log(response);
+            let response = await HttpRequest("GET", "/api/messages/contacts", []);
             response = JSON.parse(response);
-            let messages = response.result.messages;
-            console.log(messages);
-            if (messages && messages.length > 0) {
-                this.setState({messageList: messages});
+            let contacts = response.result;
+            if (contacts && contacts.length > 0) {
+                this.setState({list: contacts});
             }
         } catch (e) {
             console.error(e);
@@ -26,8 +24,8 @@ class Messages extends React.Component {
     }
 
     componentDidMount() {
-        this.getMessages();
-        this.interval = setInterval((self) => {self.getMessages()}, 10000, this);
+        this.get();
+        this.interval = setInterval((self) => {self.get()}, 10000, this);
     }
 
     componentWillUnmount() {
@@ -38,7 +36,10 @@ class Messages extends React.Component {
         return <div id={this.props.id} className={this.props.className}>
             <h1 id="page-title">Recent contacts</h1>
             <div className="list-group">
-                {this.state.messageList.map(message => <Message key={message.id} text={message.text} className="list-group-item list-group-item-action"/>)}
+                {this.state.list.map(contact => {
+                    let url = `/contact/${contact.id}`;
+                    return <Contact text={contact.username} className="list-group-item list-group-item-action" href={url}/>;
+                })}
             </div>
             <button type="button" class="btn btn-success btn-lg" onClick={()=>{window.location.href = "/"}}>Create new message</button>
             <button type="button" class="btn btn-warning btn-lg" onClick={()=>{window.location.href = "/"}}>Go back</button>
@@ -46,4 +47,4 @@ class Messages extends React.Component {
     }
 }
 
-ReactDOM.render(<Messages/>, document.getElementById('messages'));
+ReactDOM.render(<Contacts/>, document.getElementById('messages'));

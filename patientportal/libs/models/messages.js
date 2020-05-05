@@ -1,5 +1,7 @@
 const mongo = require('./mongo');
+const ObjectId = require('mongodb').ObjectId;
 const assert = require('assert');
+const User = require('./user');
 const dbName = "PatientPortal";
 const collectionName = "Messages";
 
@@ -15,8 +17,8 @@ function sendMessage(fromUser, toUser, timeStamp, message) {
         // Get the documents collection
         let = collection = db.collection(collectionName);
         let result = await collection.insertOne({
-            fromUser: fromUser,
-            toUser: toUser,
+            fromUser: new ObjectId(fromUser),
+            toUser: new ObjectId(toUser),
             timeStamp: timeStamp,
             message: message
         }).catch((err) => {
@@ -43,27 +45,47 @@ function getRecentContacts(userID) {
         // Get the documents collection
         let collection = db.collection(collectionName);
         // Find some documents
-        let sent = await collection.find({fromUser: userID}).toArray().catch(reject);
-        let inbox = await collection.find({toUser: userID }).toArray().catch(reject);
-        let contacts = [];
 
-        if (sent && sent.length > 0) {
-            sent.foreach((message) => {
-                if (contacts.indexOf(message.toUser) == -1) {
-                    contacts.push(message.toUser);
+        try {
+            let sent = await collection.find({fromUser: userID}).toArray().catch(reject);
+            let inbox = await collection.find({toUser: userID }).toArray().catch(reject);
+            
+            if (!sent || !inbox) {
+                reject("Unexpected error");
+            }
+
+            let contacts = [];
+
+            for (let i = 0; i < sent.length; i++) {
+                if (contacts.indexOf(sent[i].toUser) == -1) {
+                    contacts.push(sent[i].toUser);
                 }
-            });
-        }
+            }
 
-        if (inbox && inbox.length > 0) {
-            inbox.foreach((message) => {
-                if (contacts.indexOf(message.fromUser) == -1) {
-                    contacts.push(message.fromUser);
+            for (let i = 0; i < inbox.length; i++) {
+                if (contacts.indexOf(inbox[i].fromUser) == -1) {
+                    contacts.push(inbox[i].fromUser);
                 }
-            });
-        }
+            }
 
-        resolve(contacts);
+            for (let i = 0; i < contacts.length; i++) {
+                let id = contacts[i];
+                try {
+                    let user = await User.getUserFromID(id);
+                    if (user) {
+                        // TODO: make this into title + firstname + surname
+                        contacts[i] = {id: id, username: user.username};
+                    } else {
+                        reject("Could not find user");
+                    }
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            resolve(contacts);
+        } catch (e) {
+            reject(e);
+        }
     });
 }
 

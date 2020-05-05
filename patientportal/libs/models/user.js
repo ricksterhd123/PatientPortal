@@ -1,5 +1,6 @@
 const mongo = require('./mongo');
 const assert = require('assert');
+const ObjectId = require('mongodb').ObjectId;
 const dbName = "PatientPortal";
 const collectionName = "Users";
 
@@ -62,6 +63,25 @@ function getUser(username) {
     });
 }
 
+function getUserFromID(id) {
+    return new Promise(async function (resolve, reject) {
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
+        let db = client.db(dbName);
+        // Get the documents collection
+        let collection = db.collection(collectionName);
+        // Find some documents
+        let docs = await collection.find({
+            _id: new ObjectId(id)
+        }).toArray().catch(reject);
+
+        if (docs.length == 1){
+            resolve(docs[0]);
+        } else {
+            resolve(false);
+        }
+    });
+}
+
 function getNumberOfUsers() {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
@@ -79,5 +99,6 @@ function deleteUser(user) {} // => bool
 module.exports = {
     createUser,
     getUser,
+    getUserFromID,
     getNumberOfUsers
 };

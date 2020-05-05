@@ -48,26 +48,23 @@ app.get('*', async function (req, res, next) {
 });
 
 // REST API routes
-app.use('/api/login', api.login);
-app.use("/api/register", api.register);
-app.use("/api/logout", api.logout);
+app.use('/api/login', api.auth.login);
+app.use("/api/register", api.auth.register);
+app.use("/api/logout", api.auth.logout);
+app.use("/api/messages/contacts", api.messages.contacts);
 
-app.get('/api/contacts', function(req, res) {
-
-});
-
-app.get("/api/messages", function(req, res) {
-  if (req.token) {
-    res.send({result: {
-        messages: [ 
-          {id:0, text: "Hello world"}, 
-          {id:1, text: "Wew"}, 
-          {id:2, text: "OMG!"}
-        ]
-      }
-    });
-  }
-});
+// app.get("/api/messages", function(req, res) {
+//   if (req.token) {
+//     res.send({result: {
+//         messages: [ 
+//           {id:0, text: "Hello world"}, 
+//           {id:1, text: "Wew"}, 
+//           {id:2, text: "OMG!"}
+//         ]
+//       }
+//     });
+//   }
+// });
 
 // VIEWS
 
