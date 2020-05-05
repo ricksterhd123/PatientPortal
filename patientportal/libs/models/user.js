@@ -11,7 +11,7 @@ const collectionName = "Users";
 function createUser(username, password, options) {
     return new Promise(async function (resolve, reject) {
         // Check no other users exist with the same username
-        let userExists = await getUser(user).catch(reject);
+        let userExists = await getUser(username).catch(reject);
 
         if (!userExists) {
             let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
