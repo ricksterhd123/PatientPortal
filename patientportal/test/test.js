@@ -24,7 +24,7 @@ describe('Checking if authentication works', function() {
     it('User can register', async function() {
         try {
             const response = await request(app)
-                .post('/api/register')
+                .post('/api/auth/register')
                 .send({ username: accounts.admin.username, password: accounts.admin.password })
                 .set('Accept', 'application/json')
                 .expect('Content-Type', 'application/json; charset=utf-8')
@@ -39,7 +39,7 @@ describe('Checking if authentication works', function() {
     it('User can login', async function() {
         try {
             const response = await request(app)
-                .post('/api/login')
+                .post('/api/auth/login')
                 .set("Authorization", "Basic " + Buffer.from(accounts.admin.username + ":" + accounts.admin.password).toString('base64'))
                 .set('Accept', 'application/json')
                 .expect('Content-Type', 'application/json; charset=utf-8')
@@ -55,7 +55,7 @@ describe('Checking if authentication works', function() {
     it('First user registered is admin', async function() {
         try {
             const response = await request(app)
-                .post('/api/login')
+                .post('/api/auth/login')
                 .set("Authorization", "Basic " + Buffer.from(accounts.admin.username + ":" + accounts.admin.password).toString('base64'))
                 .set('Accept', 'application/json')
                 .expect('Content-Type', 'application/json; charset=utf-8')
@@ -72,7 +72,7 @@ describe('Checking if authentication works', function() {
     it('Second user registered is a patient', async function() {
         try {
             const response = await request(app)
-                .post('/api/register')
+                .post('/api/auth/register')
                 .send({ username: accounts.patient.username, password: accounts.patient.password })
                 .set('Accept', 'application/json')
                 .expect('Content-Type', 'application/json; charset=utf-8')
