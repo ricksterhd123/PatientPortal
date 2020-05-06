@@ -1,3 +1,4 @@
+// TODO: use HttpRequest async
 class RegisterPanel extends React.Component{
     constructor(props) {
         super(props);
@@ -18,7 +19,7 @@ class RegisterPanel extends React.Component{
     submitHandle(event) {
         let xmlHttp = new XMLHttpRequest();
         let self = this;
-        xmlHttp.open( "POST", "/api/register", false);
+        xmlHttp.open( "POST", "/api/register", true);
         xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         xmlHttp.onload = function (e) {
@@ -79,9 +80,4 @@ class RegisterPanel extends React.Component{
     }
 }
 
-function showRegisterPanel(){
-    const element = <RegisterPanel title="The Nuffield Center GP"/>;
-    ReactDOM.render(element, document.getElementById("menu"));
-}
-
-showRegisterPanel();
+ReactDOM.render(<RegisterPanel title="The Nuffield Center GP"/>, document.getElementById("menu"));

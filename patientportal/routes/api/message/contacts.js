@@ -1,3 +1,6 @@
+/**
+ * Get all available contacts with most recent first.
+ */
 const express = require('express');
 const messages = require('../../../libs/models/messages');
 const router = express.Router();

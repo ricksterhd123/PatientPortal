@@ -63,6 +63,9 @@ function getUser(username) {
     });
 }
 
+/**
+ * Get a list of all users
+ */
 function getAllUsers() {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
@@ -75,6 +78,10 @@ function getAllUsers() {
     });
 }
 
+/**
+ * Get the user from ID
+ * @param {string | ObjectId} id 
+ */
 function getUserFromID(id) {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
@@ -94,6 +101,9 @@ function getUserFromID(id) {
     });
 }
 
+/**
+ * Count number of all users in the system
+ */
 function getNumberOfUsers() {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);

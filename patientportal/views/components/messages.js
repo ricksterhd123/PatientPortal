@@ -1,7 +1,15 @@
+/**
+ * Used to render messages
+ * @param {*} props 
+ */
 function Contact(props) {
     return <button id={props.id} className={props.className} onClick={() => {props.onClick(props.contact)}}>{props.contact.username}</button>;
 }
 
+/**
+ * Contact menu component used by Menu,
+ * renders a list of contacts to message with most contacts recent first.
+ */
 class Contacts extends React.Component {
     constructor(props) {
         super(props);
@@ -22,10 +30,17 @@ class Contacts extends React.Component {
     }
 }
 
+/**
+ * Used to render one message
+ * @param {*} props 
+ */
 function Message(props) {
     return <p id={props.id} className={props.className}>{props.text}</p>
 }
 
+/**
+ * Messaging UI component used by Menu
+ */
 class Messages extends React.Component {
     constructor(props) {
         super(props);
@@ -60,6 +75,11 @@ class Messages extends React.Component {
     }
 }
 
+/**
+ * Main menu component:
+ * renders contact menu and
+ * messaging UI depending on state
+ */
 class Menu extends React.Component {
     constructor(props) {
         super(props);
@@ -136,11 +156,19 @@ class Menu extends React.Component {
         }
     }
 
+    /**
+     * Get data from API endpoints which updates the state.
+     */
     update() {
         this.getContacts();
         this.getMessages();
     }
 
+    /**
+     * Conditional rendering routine:
+     * only render the list of contacts if the user has not clicked 'create new message' or a contact has not been selected, otherwise
+     * render the UI for sending messages
+     */
     getMainComponent() {
         if (this.state.menu) {
             return <Contacts list={this.state.contacts} fn={this.handleContactSelect} backHandle={()=>{window.location.href="/"}} newMessageHandle={this.handleNewMessage}/>
@@ -149,30 +177,32 @@ class Menu extends React.Component {
         }
     }
 
-    getMainControls() {
-        if (this.state.menu) {
-            return 
-        }
-    }
-
+    /**
+     * Run this code when the component has been mounted to DOM.
+     */
     componentDidMount() {
         this.update();
         this.interval = setInterval((self) => {self.update()}, 1000, this);
     }
 
+    /**
+     * Run this code when the component is unmounted from DOM.
+     */
     componentWillUnmount() {
       clearInterval(this.interval);
     }
 
+    /**
+     * Update the component based on state
+     */
     render(){
         let components = this.getMainComponent();
-        let controls = this.getMainControls();
-
         return <div className="container">
-            <h1 id="page-title">{this.state.menu ? "Contacts" : "Messages"}</h1>
-            {components}
-            {controls}
-        </div>
+                    <h1 id="page-title">{this.state.menu ? "Contacts" : "Messages"}</h1>
+                    {components}
+                </div>
     }
 }
+
+// Mount to DOM
 ReactDOM.render(<Menu/>, document.getElementById('messages'));

@@ -12,9 +12,4 @@ class AdminPanel extends React.Component {
     }
 }
 
-function showAdminPanel() {
-    let adminPanel = <AdminPanel id="admin-panel" title="Admin settings"/>;
-    ReactDOM.render(adminPanel, document.getElementById('menu'));
-}
-
-showAdminPanel();
+ReactDOM.render(<AdminPanel id="admin-panel" title="Admin settings"/>, document.getElementById('menu'));

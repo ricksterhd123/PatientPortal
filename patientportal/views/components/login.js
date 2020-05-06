@@ -1,3 +1,4 @@
+// TODO: use HttpRequest async
 class LoginPanel extends React.Component{
     constructor(props) {
         super(props);
@@ -70,9 +71,4 @@ class LoginPanel extends React.Component{
     }
 }
 
-function showLoginPanel(){
-    const element = <LoginPanel title="The Nuffield Centre GP"/>;
-    ReactDOM.render(element, document.getElementById("menu"));
-}
-
-showLoginPanel();
+ReactDOM.render(<LoginPanel title="The Nuffield Centre GP"/>, document.getElementById("menu"));

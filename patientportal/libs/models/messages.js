@@ -33,6 +33,11 @@ function sendMessage(fromUser, toUser, timeStamp, message) {
     });
 } 
 
+/**
+ * Get a list of all messages between two users
+ * @param {string || ObjectId} fromUser 
+ * @param {string || ObjectId} toUser 
+ */
 function getMessagesFromUser(fromUser, toUser) {
     fromUser = new ObjectId(fromUser);
     toUser = new ObjectId(toUser);
@@ -153,6 +158,9 @@ function getContacts(userID) {
     });
 }
 
+/**
+ * Count number of all messages in the system
+ */
 function getNumberOfMessages() {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);

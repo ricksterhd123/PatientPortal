@@ -11,10 +11,4 @@ class IndexNavigation extends React.Component {
     }
 }
 
-function showWelcome() {
-    const element = <IndexNavigation/>;
-    ReactDOM.render(element, document.getElementById("menu"));
-}
-
-showWelcome();
-
+ReactDOM.render(<IndexNavigation/>, document.getElementById("menu"));
