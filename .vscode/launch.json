@@ -7,12 +7,30 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Program Windows",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "preLaunchTask": "preLaunch",
-            "postDebugTask": "postLaunch",
+            "preLaunchTask": "preLaunchWin",
+            "env": {
+                "DEBUG": "true",
+                "PORT": "3000",
+                "user": "root",
+                "pass": "example"
+            },
+            "cwd": "${workspaceFolder}/patientportal/bin/",
+            "program": "${workspaceFolder}/patientportal/bin/server.js",
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program Linux",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "preLaunchTask": "preLaunchLinux",
+            "postDebugTask": "postLaunchLinux",
             "env": {
                 "DEBUG": "true",
                 "PORT": "3000",

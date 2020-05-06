@@ -2,12 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "preLaunch",
+            "label": "preLaunchWin",
+            "type": "shell",
+            "command": ".vscode/preLaunch.ps1"
+        },
+        {
+            "label": "preLaunchLinux",
             "type": "shell",
             "command": "bash .vscode/preLaunch.sh"
         },
         {
-            "label": "postLaunch",
+            "label": "postLaunchLinux",
             "type": "shell",
             "command": "bash .vscode/postLaunch.sh"
         }
