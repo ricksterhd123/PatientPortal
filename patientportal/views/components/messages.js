@@ -1,5 +1,5 @@
 function Contact(props) {
-    return <button id={props.id} className={props.className} onClick={() => {props.onClick(props._id)}}>{props.text}</button>;
+    return <button id={props.id} className={props.className} onClick={() => {props.onClick(props.contact)}}>{props.contact.username}</button>;
 }
 
 class Contacts extends React.Component {
@@ -10,9 +10,13 @@ class Contacts extends React.Component {
     render() {
             return <div id={this.props.id} className={this.props.className}>
                         <div className="list-group">
-                        {this.props.list.map(contact => {
-                            return <Contact text={contact.username} className="list-group-item list-group-item-action" onClick={this.props.fn} _id={contact.id}/>;
-                        })}
+                            {this.props.list.map(contact => {
+                                return <Contact className="list-group-item list-group-item-action" onClick={this.props.fn} contact={contact}/>;
+                            })}
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-success btn-lg" onClick={this.props.newMessageHandle}>Create new message</button>
+                            <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
                         </div>
                     </div>;
     }
@@ -36,9 +40,21 @@ class Messages extends React.Component {
 
     render() {
         return <div id={this.props.id} className={this.props.className}>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {`Contact: ${this.props.selectedContact? this.props.selectedContact.username : "Select someone to contact"}`}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {this.props.contacts.map(c => <a onClick={() => {this.props.selectNewContact(c)}} class="dropdown-item">{c.username}</a>)}
+                </div>
+            </div>
             {this.props.list.map(e => <Message text={`[${e.timeStamp}] ${e.fromUser}: ${e.message}`}/>)}
             <div class="form-group">
-                <textarea class="form-control" rows="3" onChange={this.handleInput}></textarea>
+                <textarea class="form-control" onChange={this.handleInput}></textarea>
+            </div>
+            <div class="container">
+                <button type="button" class="btn btn-success btn-lg" onClick={() => {this.props.sendHandle}}>Send message</button>
+                <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
             </div>
         </div>
     }
@@ -67,9 +83,9 @@ class Menu extends React.Component {
      * Select user id to read and write messages to
      * @param {string} id 
      */
-    handleContactSelect(id) {
-        console.log(id);
-        this.setState({menu: false, selected: id})
+    handleContactSelect(contact) {
+        console.log(`Object: ${contact}`);
+        this.setState({menu: false, selected: contact})
         this.getMessages();
     }
 
@@ -83,7 +99,7 @@ class Menu extends React.Component {
     }
 
     /**
-     * Get list of recent contact userIds from /api/messages/contacts
+     * Get list of contacts: [{username, id}] from /api/messages/contacts
      */
     async getContacts(){
         try {
@@ -107,7 +123,7 @@ class Menu extends React.Component {
             this.setState({messages: []});
         } else {
             try {
-                let response = await HttpRequest("GET", `/api/messages/from/${this.state.selected}`);
+                let response = await HttpRequest("GET", `/api/messages/from/${this.state.selected.id}`);
                 response = JSON.parse(response);
                 console.log(response);
                 let messages = response.result;
@@ -127,22 +143,15 @@ class Menu extends React.Component {
 
     getMainComponent() {
         if (this.state.menu) {
-            return <Contacts list={this.state.contacts} fn={this.handleContactSelect}/>
+            return <Contacts list={this.state.contacts} fn={this.handleContactSelect} backHandle={()=>{window.location.href="/"}} newMessageHandle={this.handleNewMessage}/>
         } else {
-            return <Messages list={this.state.messages}/>
+            return <Messages list={this.state.messages} selectedContact={this.state.selected} contacts={this.state.contacts} backHandle={this.backHandle} selectNewContact={this.handleContactSelect}/>
         }
     }
 
     getMainControls() {
         if (this.state.menu) {
-            return <div><button type="button" class="btn btn-success btn-lg" >Create new message</button>
-                        <button type="button" class="btn btn-warning btn-lg" onClick={() => {window.location.href='/'}}>Go back</button>
-                    </div>
-        } else {
-            return <div>
-                <button type="button" class="btn btn-success btn-lg">Send message</button>
-                <button type="button" class="btn btn-warning btn-lg" onClick={this.backHandle}>Go back</button>
-            </div>
+            return 
         }
     }
 
@@ -156,13 +165,13 @@ class Menu extends React.Component {
     }
 
     render(){
-        let component = this.getMainComponent();
-        let control = this.getMainControls();
+        let components = this.getMainComponent();
+        let controls = this.getMainControls();
 
         return <div className="container">
-            <h1 id="page-title">Recent contacts</h1>
-            {component}
-            {control}
+            <h1 id="page-title">{this.state.menu ? "Contacts" : "Messages"}</h1>
+            {components}
+            {controls}
         </div>
     }
 }

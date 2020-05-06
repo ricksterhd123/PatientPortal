@@ -26,7 +26,7 @@ router.post('/', async function (req, res) {
         if (valid) {
             res.cookie('jwt', jwt.sign({
                 id: user._id,
-                role: user.role
+                role: user.options.role
             }, JWTSecret), {
                 httpOnly: true
             });

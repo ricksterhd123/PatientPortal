@@ -2,6 +2,7 @@ const mongo = require('./mongo');
 const ObjectId = require('mongodb').ObjectId;
 const assert = require('assert');
 const User = require('./user');
+const Roles = require('../roles');
 const dbName = "PatientPortal";
 const collectionName = "Messages";
 
@@ -66,12 +67,30 @@ function getMessagesFromUser(fromUser, toUser) {
 }
 
 /**
+ * Filter contacts for certain roles
+ * Users can only message doctors
+ * Doctors and admins can message any user
+ */
+function filterContacts(role, contacts) {
+    if (role == Roles.USER) {
+        // Doctors only
+        return contacts.filter(v => {return v.options.role == Roles.USER || v.options.role == Roles.DOCTOR || v.options.role == Roles.ADMIN});
+    } else if (role == Roles.DOCTOR) {
+        // All
+        return Contacts.filter(v => {return v.options.role == Roles.USER || v.options.role == Roles.DOCTOR || v.options.role == Roles.ADMIN});
+    } else if (role == Roles.ADMIN) {
+        // Doctors and admins only, but for debugging: all
+        return Contacts.filter(v => {return v.options.role == Roles.USER || v.options.role == Roles.DOCTOR || v.options.role == Roles.ADMIN});
+    }
+}
+
+/**
  * Returns promise to find list of userID contacats
  * note: resolve given false is no user is found
  * @param {string} userID - A string userID
  * @returns Promise 
  */
-function getRecentContacts(userID) {
+function getContacts(userID) {
     userID = new ObjectId(userID);
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
@@ -81,41 +100,52 @@ function getRecentContacts(userID) {
         // Find some documents
 
         try {
-            let sent = await collection.find({fromUser: userID}).toArray().catch(reject);
-            let inbox = await collection.find({toUser: userID }).toArray().catch(reject);
+            // Get all users
+            let allUsers = await User.getAllUsers();
+            // Get the user with id: userID
             
-            if (!sent || !inbox) {
-                reject("Unexpected error");
-            }
+
+            // Find recent contacts
+            let sent = await collection.find({fromUser: userID}).toArray();
+            let inbox = await collection.find({toUser: userID }).toArray();
 
             let contacts = [];
 
+            // Push all contacts userID sent messages to.
             for (let i = 0; i < sent.length; i++) {
-                if (contacts.indexOf(sent[i].toUser) == -1) {
+                let id = sent[i].toUser;
+                if (contacts.indexOf(id) == -1) {
                     contacts.push(sent[i].toUser);
                 }
             }
 
+            // Push all contacts userID received messages from.
             for (let i = 0; i < inbox.length; i++) {
                 if (contacts.indexOf(inbox[i].fromUser) == -1) {
                     contacts.push(inbox[i].fromUser);
                 }
             }
 
+            // Get their id and usernames
             for (let i = 0; i < contacts.length; i++) {
                 let id = contacts[i];
-                try {
-                    let user = await User.getUserFromID(id);
-                    if (user) {
-                        // TODO: make this into title + firstname + surname
-                        contacts[i] = {id: id, username: user.username};
-                    } else {
-                        reject("Could not find user");
-                    }
-                } catch (e) {
-                    reject(e);
+                let index = allUsers.findIndex(v => {
+                    return new ObjectId(v._id).equals(new ObjectId(id));
+                });
+
+                if (index != -1) {
+                    contacts[i] = {id: id, username: allUsers[index].username};
                 }
             }
+
+            // Add the rest
+            for (let i = 0; i < allUsers.length; i++) {
+                let index = contacts.findIndex(v => { return new ObjectId(v.id).equals(new ObjectId(allUsers[i]._id)) });
+                if (index == -1) {
+                    contacts.push({id: allUsers[i]._id, username: allUsers[i].username});
+                }
+            }
+            //contacts = filterContacts(thisUserRole, contacts);
             resolve(contacts);
         } catch (e) {
             reject(e);
@@ -137,4 +167,4 @@ function updateMessage(user) {} // => bool
 
 function deleteMessage(user) {} // => bool
 
-module.exports = {sendMessage, getMessagesFromUser, getRecentContacts, getNumberOfMessages};
+module.exports = {sendMessage, getMessagesFromUser, getContacts, getNumberOfMessages};

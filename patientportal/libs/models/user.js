@@ -63,6 +63,18 @@ function getUser(username) {
     });
 }
 
+function getAllUsers() {
+    return new Promise(async function (resolve, reject) {
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
+        let db = client.db(dbName);
+        // Get the documents collection
+        let collection = db.collection(collectionName);
+        // Find some documents
+        let docs = await collection.find({}).toArray().catch(reject);
+        resolve(docs);
+    });
+}
+
 function getUserFromID(id) {
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
@@ -97,6 +109,7 @@ function updateUser(user) {} // => bool
 function deleteUser(user) {} // => bool
 
 module.exports = {
+    getAllUsers,
     createUser,
     getUser,
     getUserFromID,
