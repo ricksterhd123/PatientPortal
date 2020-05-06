@@ -37,7 +37,7 @@ class Contacts extends React.Component {
             <h1 id="page-title">Recent contacts</h1>
             <div className="list-group">
                 {this.state.list.map(contact => {
-                    let url = `/contact/${contact.id}`;
+                    let url = `/messages/${contact.id}`;
                     return <Contact text={contact.username} className="list-group-item list-group-item-action" href={url}/>;
                 })}
             </div>

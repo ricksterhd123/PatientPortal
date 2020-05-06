@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get("/", function (req, res) {
-    res.render('contact.pug');
+    res.render('messages.pug');
 });
 
 module.exports = router;

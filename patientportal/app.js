@@ -72,7 +72,7 @@ app.use('/', views.index);
 app.use('/login', views.login);
 app.use('/register', views.register);
 app.use('/appointments', views.appointments);
-app.use('/contact', views.messages);
+app.use('/messages', views.messages);
 app.use('/symptoms', views.symptoms);
 app.use('/settings', views.settings);
 
