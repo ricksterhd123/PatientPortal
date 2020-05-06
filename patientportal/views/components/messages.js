@@ -191,7 +191,7 @@ class Menu extends React.Component {
     render(){
         let components = this.getMainComponent();
         return <div className="container">
-                    <h1 id="page-title">{this.state.menu ? "Contacts" : "Messages"}</h1>
+                    <h1 id="page-title">Messages</h1>
                     {components}
                 </div>
     }
