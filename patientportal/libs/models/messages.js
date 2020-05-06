@@ -79,24 +79,6 @@ function getMessagesFromUser(fromUser, toUser) {
 }
 
 /**
- * Filter contacts for certain roles
- * Users can only message doctors
- * Doctors and admins can message any user
- */
-function filterContacts(role, contacts) {
-    if (role == Roles.USER) {
-        // Doctors only
-        return contacts.filter(v => {return v.options.role == Roles.USER || v.options.role == Roles.DOCTOR || v.options.role == Roles.ADMIN});
-    } else if (role == Roles.DOCTOR) {
-        // All
-        return Contacts.filter(v => {return v.options.role == Roles.USER || v.options.role == Roles.DOCTOR || v.options.role == Roles.ADMIN});
-    } else if (role == Roles.ADMIN) {
-        // Doctors and admins only, but for debugging: all
-        return Contacts.filter(v => {return v.options.role == Roles.USER || v.options.role == Roles.DOCTOR || v.options.role == Roles.ADMIN});
-    }
-}
-
-/**
  * Returns promise to find list of userID contacats
  * note: resolve given false is no user is found
  * @param {string} userID - A string userID
@@ -118,7 +100,11 @@ function getContacts(userID) {
             let thisUserIndex = allUsers.findIndex(v => {
                 return new ObjectId(v._id).equals(userID);
             });
-            allUsers.splice(thisUserIndex, 1);
+
+            if (thisUserIndex != -1)
+            {
+                allUsers.splice(thisUserIndex, 1);
+            }
 
             // Find recent contacts
             let sent = await collection.find({fromUser: userID}).toArray();
@@ -150,7 +136,7 @@ function getContacts(userID) {
                 });
 
                 if (index != -1) {
-                    contacts[i] = {id: id, username: allUsers[index].username};
+                    contacts[i] = {id: id, username: allUsers[index].username, role: allUsers[i].options.role};
                 }
             }
 
@@ -158,10 +144,10 @@ function getContacts(userID) {
             for (let i = 0; i < allUsers.length; i++) {
                 let index = contacts.findIndex(v => { return new ObjectId(v.id).equals(new ObjectId(allUsers[i]._id)) });
                 if (index == -1) {
-                    contacts.push({id: allUsers[i]._id, username: allUsers[i].username});
+                    contacts.push({id: allUsers[i]._id, username: allUsers[i].username, role: allUsers[i].options.role});
                 }
             }
-            //contacts = filterContacts(thisUserRole, contacts);
+
             resolve(contacts);
         } catch (e) {
             reject(e);

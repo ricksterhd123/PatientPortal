@@ -17,13 +17,13 @@ class Contacts extends React.Component {
 
     render() {
             return <div id={this.props.id} className={this.props.className}>
+                        <h2>Select contact</h2>
                         <div className="list-group">
                             {this.props.list.map(contact => {
                                 return <Contact className="list-group-item list-group-item-action" onClick={this.props.fn} contact={contact}/>;
                             })}
                         </div>
                         <div>
-                            <button type="button" class="btn btn-success btn-lg" onClick={this.props.newMessageHandle}>Create new message</button>
                             <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
                         </div>
                     </div>;
@@ -77,18 +77,10 @@ class Menu extends React.Component {
         super(props);
         this.mode  = 
         this.state = {menu: true, selected: false, contacts: [], messages: []}
-        this.handleNewMessage = this.handleNewMessage.bind(this);
         this.handleContactSelect = this.handleContactSelect.bind(this);
         this.getMainComponent = this.getMainComponent.bind(this);
         this.backHandle = this.backHandle.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-    }
-
-    /**
-     * Create new message
-     */
-    handleNewMessage(){
-        this.setState({menu: false, selected: false});
     }
 
     /**
@@ -150,9 +142,7 @@ class Menu extends React.Component {
     async sendMessage(message) {
         if (this.state.selected) {
             try {
-                console.log(message);
                 let response = await HttpRequest("POST", `/api/messages/send/${this.state.selected.id}`, [], JSON.stringify({timeStamp: new Date().toISOString(), message: message}));
-                console.log(`Response: ${response}`);
                 this.getMessages();
             } catch (e) {
                 console.error(e);
@@ -174,7 +164,7 @@ class Menu extends React.Component {
      */
     getMainComponent() {
         if (this.state.menu) {
-            return <Contacts list={this.state.contacts} fn={this.handleContactSelect} backHandle={()=>{window.location.href="/"}} newMessageHandle={this.handleNewMessage}/>
+            return <Contacts list={this.state.contacts} fn={this.handleContactSelect} backHandle={()=>{window.location.href="/"}}/>
         } else {
             return <Messages list={this.state.messages} sendHandle={this.sendMessage} backHandle={this.backHandle}/>
         }
