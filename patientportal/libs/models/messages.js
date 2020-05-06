@@ -30,7 +30,40 @@ function sendMessage(fromUser, toUser, timeStamp, message) {
             reject("Inserted more than one documents");
         }
     });
-} // => bool
+} 
+
+function getMessagesFromUser(fromUser, toUser) {
+    fromUser = new ObjectId(fromUser);
+    toUser = new ObjectId(toUser);
+
+    return new Promise(async function (resolve, reject) {
+        try {
+            let client = await mongo.client.connect(mongo.URL, mongo.options);
+            let db = client.db(dbName);
+            // Get the documents collection
+            let collection = db.collection(collectionName);
+            // Find some documents
+            let sent = await collection.find({fromUser: fromUser, toUser: toUser}).toArray();
+            let recieved = await collection.find({fromUser: toUser, toUser: fromUser}).toArray();
+            let messages = sent.concat(recieved);
+
+            for (let i = 0; i < messages.length; i++) {
+                let fUser = await User.getUserFromID(messages[i].fromUser);
+                let tUser = await User.getUserFromID(messages[i].toUser);
+                
+                if (!fUser || !tUser) {
+                    reject("Could not find user with provided id");
+                }
+
+                messages[i].fromUser = fUser.username;
+                messages[i].toUser = tUser.username;
+            }
+            resolve(messages);
+        } catch (e) { 
+            reject(e);
+        };
+    });
+}
 
 /**
  * Returns promise to find list of userID contacats
@@ -39,6 +72,7 @@ function sendMessage(fromUser, toUser, timeStamp, message) {
  * @returns Promise 
  */
 function getRecentContacts(userID) {
+    userID = new ObjectId(userID);
     return new Promise(async function (resolve, reject) {
         let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
         let db = client.db(dbName);
@@ -103,4 +137,4 @@ function updateMessage(user) {} // => bool
 
 function deleteMessage(user) {} // => bool
 
-module.exports = {sendMessage, getRecentContacts, getNumberOfMessages};
+module.exports = {sendMessage, getMessagesFromUser, getRecentContacts, getNumberOfMessages};
