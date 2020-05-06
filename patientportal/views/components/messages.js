@@ -55,20 +55,12 @@ class Messages extends React.Component {
 
     render() {
         return <div id={this.props.id} className={this.props.className}>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {`Contact: ${this.props.selectedContact? this.props.selectedContact.username : "Select someone to contact"}`}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  {this.props.contacts.map(c => <a onClick={() => {this.props.selectNewContact(c)}} class="dropdown-item">{c.username}</a>)}
-                </div>
-            </div>
             {this.props.list.map(e => <Message text={`[${e.timeStamp}] ${e.fromUser}: ${e.message}`}/>)}
             <div class="form-group">
-                <textarea class="form-control" onChange={this.handleInput}></textarea>
+                <textarea class="form-control" onChange={this.handleInput} value={this.state.inputBox}></textarea>
             </div>
             <div class="container">
-                <button type="button" class="btn btn-success btn-lg" onClick={() => {this.props.sendHandle(this.state.inputBox)}} >Send message</button>
+                <button type="button" class="btn btn-success btn-lg" onClick={() => {this.props.sendHandle(this.state.inputBox); this.setState({inputBox: ""})}} >Send message</button>
                 <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
             </div>
         </div>
@@ -141,7 +133,7 @@ class Menu extends React.Component {
     async getMessages(){
         if (this.state.menu) {
             this.setState({messages: []});
-        } else {
+        } else if (this.state.selected) {
             try {
                 let response = await HttpRequest("GET", `/api/messages/from/${this.state.selected.id}`);
                 response = JSON.parse(response);
@@ -184,7 +176,7 @@ class Menu extends React.Component {
         if (this.state.menu) {
             return <Contacts list={this.state.contacts} fn={this.handleContactSelect} backHandle={()=>{window.location.href="/"}} newMessageHandle={this.handleNewMessage}/>
         } else {
-            return <Messages list={this.state.messages} selectedContact={this.state.selected} sendHandle={this.sendMessage} contacts={this.state.contacts} backHandle={this.backHandle} selectNewContact={this.handleContactSelect}/>
+            return <Messages list={this.state.messages} sendHandle={this.sendMessage} backHandle={this.backHandle}/>
         }
     }
 

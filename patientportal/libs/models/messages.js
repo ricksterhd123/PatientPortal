@@ -116,7 +116,7 @@ function getContacts(userID) {
             let allUsers = await User.getAllUsers();
             // Get the user with id: userID
             let thisUserIndex = allUsers.findIndex(v => {
-                return new ObjectId(v._id).equals(new ObjectId(userID));
+                return new ObjectId(v._id).equals(userID);
             });
             allUsers.splice(thisUserIndex, 1);
 
