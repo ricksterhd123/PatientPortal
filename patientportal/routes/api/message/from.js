@@ -7,7 +7,6 @@ router.get("/:userID", async function (req, res) {
         try {
             let id = req.token.id;
             let messages = await Message.getMessagesFromUser(id, req.params.userID);
-            console.log(messages);
             res.json({result: messages}); 
         } catch (e) {
             console.error(e);

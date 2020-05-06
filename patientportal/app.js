@@ -51,6 +51,7 @@ app.get('*', async function (req, res, next) {
 app.use('/api/login', api.auth.login);
 app.use("/api/register", api.auth.register);
 app.use("/api/logout", api.auth.logout);
+app.use("/api/messages/send", api.messages.send);
 app.use("/api/messages/from", api.messages.messages);
 app.use("/api/messages/contacts", api.messages.contacts);
 

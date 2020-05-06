@@ -50,7 +50,7 @@ class Messages extends React.Component {
 
     handleInput(e) {
         console.log(e.target.value);
-        this.setState({rows: count, inputBox: e.target.value});
+        this.setState({inputBox: e.target.value});
     }
 
     render() {
@@ -68,7 +68,7 @@ class Messages extends React.Component {
                 <textarea class="form-control" onChange={this.handleInput}></textarea>
             </div>
             <div class="container">
-                <button type="button" class="btn btn-success btn-lg" onClick={() => {this.props.sendHandle}}>Send message</button>
+                <button type="button" class="btn btn-success btn-lg" onClick={() => {this.props.sendHandle(this.state.inputBox)}} >Send message</button>
                 <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
             </div>
         </div>
@@ -88,8 +88,8 @@ class Menu extends React.Component {
         this.handleNewMessage = this.handleNewMessage.bind(this);
         this.handleContactSelect = this.handleContactSelect.bind(this);
         this.getMainComponent = this.getMainComponent.bind(this);
-        this.getMainControls = this.getMainControls.bind(this);
         this.backHandle = this.backHandle.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
     }
 
     /**
@@ -145,7 +145,6 @@ class Menu extends React.Component {
             try {
                 let response = await HttpRequest("GET", `/api/messages/from/${this.state.selected.id}`);
                 response = JSON.parse(response);
-                console.log(response);
                 let messages = response.result;
                 if (messages && messages.length > 0) {
                     this.setState({messages: messages});
@@ -156,6 +155,18 @@ class Menu extends React.Component {
         }
     }
 
+    async sendMessage(message) {
+        if (this.state.selected) {
+            try {
+                console.log(message);
+                let response = await HttpRequest("POST", `/api/messages/send/${this.state.selected.id}`, [], JSON.stringify({timeStamp: new Date().toISOString(), message: message}));
+                console.log(`Response: ${response}`);
+                this.getMessages();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
     /**
      * Get data from API endpoints which updates the state.
      */
@@ -173,7 +184,7 @@ class Menu extends React.Component {
         if (this.state.menu) {
             return <Contacts list={this.state.contacts} fn={this.handleContactSelect} backHandle={()=>{window.location.href="/"}} newMessageHandle={this.handleNewMessage}/>
         } else {
-            return <Messages list={this.state.messages} selectedContact={this.state.selected} contacts={this.state.contacts} backHandle={this.backHandle} selectNewContact={this.handleContactSelect}/>
+            return <Messages list={this.state.messages} selectedContact={this.state.selected} sendHandle={this.sendMessage} contacts={this.state.contacts} backHandle={this.backHandle} selectNewContact={this.handleContactSelect}/>
         }
     }
 

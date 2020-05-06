@@ -64,6 +64,13 @@ function getMessagesFromUser(fromUser, toUser) {
                 messages[i].fromUser = fUser.username;
                 messages[i].toUser = tUser.username;
             }
+
+            messages.sort( (a, b) => {
+                let aDate = new Date(a.timeStamp);
+                let bDate = new Date(b.timeStamp);
+                return aDate < bDate;
+            });
+
             resolve(messages);
         } catch (e) { 
             reject(e);
@@ -108,7 +115,10 @@ function getContacts(userID) {
             // Get all users
             let allUsers = await User.getAllUsers();
             // Get the user with id: userID
-            
+            let thisUserIndex = allUsers.findIndex(v => {
+                return new ObjectId(v._id).equals(new ObjectId(userID));
+            });
+            allUsers.splice(thisUserIndex, 1);
 
             // Find recent contacts
             let sent = await collection.find({fromUser: userID}).toArray();
@@ -119,14 +129,15 @@ function getContacts(userID) {
             // Push all contacts userID sent messages to.
             for (let i = 0; i < sent.length; i++) {
                 let id = sent[i].toUser;
-                if (contacts.indexOf(id) == -1) {
+                if (contacts.findIndex((c) => {return new ObjectId(c).equals(new ObjectId(id))}) == -1) {
                     contacts.push(sent[i].toUser);
                 }
             }
 
             // Push all contacts userID received messages from.
             for (let i = 0; i < inbox.length; i++) {
-                if (contacts.indexOf(inbox[i].fromUser) == -1) {
+                let id = inbox[i].fromUser;
+                if (contacts.findIndex((c) => {return new ObjectId(c).equals(new ObjectId(id))}) == -1) {
                     contacts.push(inbox[i].fromUser);
                 }
             }

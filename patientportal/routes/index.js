@@ -4,8 +4,9 @@ api.auth.login = require('./api/authentication/login');
 api.auth.register = require('./api/authentication/register');
 api.auth.logout = require('./api/authentication/logout');
 api.messages = {};
-api.messages.messages = require('./api/message/messages');
+api.messages.messages = require('./api/message/from');
 api.messages.contacts = require('./api/message/contacts');
+api.messages.send = require('./api/message/send');
 
 let views = {};
 views.index = require('./views/home');
