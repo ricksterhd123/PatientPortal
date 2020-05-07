@@ -47,13 +47,23 @@ app.get('*', async function (req, res, next) {
   }
 });
 
-// REST API routes
+// Authentication
 app.use('/api/login', api.auth.login);
 app.use("/api/register", api.auth.register);
 app.use("/api/logout", api.auth.logout);
+// Messaging
 app.use("/api/messages/send", api.messages.send);
-app.use("/api/messages/from", api.messages.messages);
+app.use("/api/messages/from", api.messages.from);
 app.use("/api/messages/contacts", api.messages.contacts);
+// Appointments
+app.use("/api/appointments/create", api.appointments.create);
+app.use("/api/appointments/cancel", api.appointments.cancel);
+app.use("/api/appointments/reschedule", api.appointments.update);
+app.use("/api/appointments/slots", api.appointments.slots);
+app.use("/api/appointments/schedule", api.appointments.schedule);
+// Settings
+
+// Admin controls
 
 // app.get("/api/messages", function(req, res) {
 //   if (req.token) {

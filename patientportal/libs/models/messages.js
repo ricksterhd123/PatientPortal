@@ -136,7 +136,7 @@ function getContacts(userID) {
                 });
 
                 if (index != -1) {
-                    contacts[i] = {id: id, username: allUsers[index].username, role: allUsers[i].options.role};
+                    contacts[i] = {id: id, username: allUsers[index].username, role: allUsers[index].options.role};
                 }
             }
 
