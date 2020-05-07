@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Roles = require('../../../libs/roles');
 const Appointment = require('../../../libs/models/appointments');
+const User = require('../../../libs/models/user');
 
 // assume patient is making appointment first
 
@@ -13,7 +14,14 @@ router.get("/", async function (req, res) {
         try {
             if (req.token.role == Roles.USER) {
                 let appointments = await Appointment.getSlotsTaken();
-                res.json({result: appointments});
+                let users = await User.getAllUsers();
+                users = users.filter((x) => {return x.options.role == Roles.DOCTOR});
+                if (!users) {
+                    res.status(500).send();
+                    console.trace("No clinicians found");
+                } else {
+                    res.json({result: appointments, clinicians: users.length});
+                }
             } else {
                 res.status(500).send("Not implemented");
             }

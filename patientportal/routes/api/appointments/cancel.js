@@ -8,7 +8,7 @@ const Appointment = require('../../../libs/models/appointments');
 /**
  * Get all available slots
  */
-router.get("/", async function (req, res) {
+router.post("/", async function (req, res) {
     if (req.token && req.body.appointmentID) {
         try {
             if (req.token.role == Roles.USER) {

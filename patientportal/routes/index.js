@@ -13,6 +13,8 @@ api.appointments.cancel = require('./api/appointments/cancel');
 api.appointments.slots = require('./api/appointments/slots');
 api.appointments.schedule = require('./api/appointments/schedule');
 api.appointments.update = require('./api/appointments/update');
+// get all available clinicians
+api.appointments.clinicians = require('./api/appointments/clinicians');
 
 let views = {};
 views.index = require('./views/home');

@@ -14,7 +14,7 @@ function HttpRequest(method, url, reqHeaders, body) {
             let xmlHttp = new XMLHttpRequest();
             
             xmlHttp.open(method, url, true);
-            xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlHttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
             if (reqHeaders && reqHeaders.length > 0) {
                 for (let [key, value] of Object.entries(reqHeaders)) {
                     xmlHttp.setRequestHeader(key, value);

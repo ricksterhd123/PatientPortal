@@ -2,6 +2,7 @@ class IndexNavigation extends React.Component {
     
     render(){
         return <div class="container btn-group-vertical">
+                <h2>Main menu</h2>
                 <button type="button" class="btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/symptoms"}}>How are you feeling?</button>
                 <button type="button" class="btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/appointments"}}>Appointments</button>
                 <button type="button" class="btn btn-primary btn-lg btn-block" onClick={()=>{window.location.href = "/messages"}}>Messages</button>

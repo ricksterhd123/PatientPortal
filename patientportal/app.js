@@ -61,6 +61,7 @@ app.use("/api/appointments/cancel", api.appointments.cancel);
 app.use("/api/appointments/reschedule", api.appointments.update);
 app.use("/api/appointments/slots", api.appointments.slots);
 app.use("/api/appointments/schedule", api.appointments.schedule);
+app.use("/api/appointments/clinicians", api.appointments.clinicians); // get all clinicians
 // Settings
 
 // Admin controls

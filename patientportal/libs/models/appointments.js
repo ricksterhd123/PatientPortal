@@ -122,17 +122,17 @@ function getSlotsTaken() {
             let allAppointments = await collection.find({}).toArray();
             allAppointments.sort((a, b) => {return new Date(a.dateTime) < new Date(b.dateTime)});
 
-            let clinicians = [];
+            // let clinicians = [];
 
-            for (let i = 0; i < allAppointments.length; i++) {
-                let index = clinicians.findIndex(v => {return v.clinicianID.equals(allAppointments[i].clinicianID)});
-                if (index == -1) {
-                    index = clinicians.push({clinicianID: allAppointments[i].clinicianID, appointments: []}) - 1;
-                }
-                clinicians[index].appointments.push({dateTime: allAppointments[i].dateTime, duration: allAppointments[i].duration});
-            }
-
-            resolve(clinicians);
+            // for (let i = 0; i < allAppointments.length; i++) {
+            //     let index = clinicians.findIndex(v => {return v.clinicianID.equals(allAppointments[i].clinicianID)});
+            //     if (index == -1) {
+            //         index = clinicians.push({clinicianID: allAppointments[i].clinicianID, appointments: []}) - 1;
+            //     }
+            //     clinicians[index].appointments.push({dateTime: allAppointments[i].dateTime, duration: allAppointments[i].duration});
+            // }
+            
+            resolve(allAppointments);
         } catch (e) {
             reject(e);
         }
