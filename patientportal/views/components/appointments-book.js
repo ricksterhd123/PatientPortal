@@ -55,6 +55,7 @@ class BookAppointment extends React.Component {
             <p>Date: {new Date(this.props.time).toDateString()}</p>
             <p>Duration: 15 minutes</p>
             <button type="button" class="btn btn-primary btn-lg" onClick={() => {this.props.handleClick(this.state.selected)}}>Book appointment</button>
+            <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
         </div>
     }
 }

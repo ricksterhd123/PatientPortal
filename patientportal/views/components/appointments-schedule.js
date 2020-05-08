@@ -8,14 +8,14 @@ var slotsEachDay = dayDurationHours / appointmentDurationHours;
 var daysEachWeek = 6; // m | t | w | t | f | s
 var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-class Schedule extends React.Component {
+class AppointmentSchedule extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
         let cols = [];
-        let schedule = this.props.slots;
+        let schedule = this.props.schedule;
         if (schedule) {
             for (let i = 0; i < slotsEachDay; i++) {
                 let time = false;
@@ -45,7 +45,7 @@ class Schedule extends React.Component {
                     )}
                 </tbody>
             </table>
-
+            <button type="button" class="btn btn-primary btn-lg btn-block" onClick={this.props.backHandle}>Go back</button>
         </div>
     }
 }

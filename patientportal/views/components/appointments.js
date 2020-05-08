@@ -79,9 +79,9 @@ class Appointments extends React.Component {
     constructor(props) {
         super(props);
         this.state = { booked: false, slot: false, booking: false, slots: emptySlots(), schedule: false};
-        this.getComponents = this.getComponents.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.bookClick = this.bookClick.bind(this);
+        this.selectSlot = this.selectSlot.bind(this);
+        this.book = this.book.bind(this);
+        this.resetState = this.resetState.bind(this);
     }
 
     async getSchedule() {
@@ -106,7 +106,6 @@ class Appointments extends React.Component {
                         }
                     }
                 }
-                console.log(schedule);
                 this.setState({schedule: schedule});
             }
         } catch (e) {
@@ -173,11 +172,11 @@ class Appointments extends React.Component {
         clearInterval(this.interval);
     }
     
-    handleClick(item) {
+    selectSlot(item) {
         this.setState({ slot: item });
     }
 
-    async bookClick(clinician) {
+    async book(clinician) {
         try {
             let response = await HttpRequest("POST", "/api/appointments/create", [], JSON.stringify({id: clinician._id, dateTime: new Date(this.state.slot.time)}));
             response = JSON.parse(response);
@@ -187,22 +186,18 @@ class Appointments extends React.Component {
         }
     }
 
-    getComponents() {
-        if (!this.state.booked && !this.state.slot && !this.state.schedule) {
-            return <Slots slots={this.state.slots} handleClick={this.handleClick} />;
-        } else if (this.state.slot) {
-            return <BookAppointment time={this.state.slot.time} appointments={this.state.slot.appointments} handleClick={this.bookClick}/>
-        } else {
-            return <Schedule slots={this.state.schedule} handleClick={console.log}/>
-        }
+    resetState() {
+        this.setState({booked: false, slot: false, booking: false, slots: emptySlots(), schedule: false});
     }
 
     render() {
-        let controls = <button type="button" class="btn btn-primary btn-lg btn-block" onClick={() => { window.location.href = "/" }}>Go back</button>;
-        return <div>
-            {this.getComponents()}
-            {controls}
-        </div>
+        if (!this.state.booked && !this.state.slot && !this.state.schedule) {
+            return <AppointmentSlots slots={this.state.slots} handleClick={this.selectSlot} backHandle={() => {window.location.href="/"}}/>;
+        } else if (this.state.slot) {
+            return  <BookAppointment time={this.state.slot.time} appointments={this.state.slot.appointments} handleClick={this.book} backHandle={this.resetState}/>
+        } else {
+            return <AppointmentSchedule schedule={this.state.schedule} handleClick={console.log} backHandle={() => {window.location.href="/"}}/>
+        }
     }
 }
 
