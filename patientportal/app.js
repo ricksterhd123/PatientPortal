@@ -66,19 +66,6 @@ app.use("/api/appointments/clinicians", api.appointments.clinicians); // get all
 
 // Admin controls
 
-// app.get("/api/messages", function(req, res) {
-//   if (req.token) {
-//     res.send({result: {
-//         messages: [ 
-//           {id:0, text: "Hello world"}, 
-//           {id:1, text: "Wew"}, 
-//           {id:2, text: "OMG!"}
-//         ]
-//       }
-//     });
-//   }
-// });
-
 // VIEWS
 
 app.use('/', views.index);

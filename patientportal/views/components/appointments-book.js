@@ -1,4 +1,9 @@
 
+/**
+ * Enable the user to choose clinician and book selected appointment slot.
+ * Once the user has selected an available appointment slot they must choose a clinician that is available, 
+ * (i.e no overlapping appointments during user's selected slot)
+ */
 class BookAppointment extends React.Component {
     constructor(props) {
         super(props);
@@ -12,9 +17,9 @@ class BookAppointment extends React.Component {
         response = JSON.parse(response);
         let clinicians = response.result;
         clinicians = clinicians.filter(c => {
-            let index = this.props.appointments.findIndex(a => {return a.clinicianID == c._id});
-            return index == -1;
-        })
+            // Check if clinician ID already exists in the list of appointments in the slot.
+            return this.props.appointments.findIndex(appointment => {return appointment.clinicianID == c._id}) == -1;
+        });
         this.setState({clinicians: clinicians});
     }
 
