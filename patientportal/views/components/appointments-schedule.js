@@ -1,3 +1,9 @@
+var weekStart = new Date();
+weekStart.setDate(new Date().getDate() - new Date().getDay() + 1);
+weekStart.setHours(7);
+weekStart.setMinutes(0);
+weekStart.setSeconds(0);
+weekStart.setMilliseconds(0);
 
 var startTime = { hours: 7, minutes: 0, seconds: 0, milliseconds: 0 };
 var endTime = { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 };
@@ -32,7 +38,7 @@ class AppointmentSchedule extends React.Component {
 
         return <div>
             <h2>Schedule</h2>
-            <table class="table table-bordered">
+            <table className="table table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">#</th>

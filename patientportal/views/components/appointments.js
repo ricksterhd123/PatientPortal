@@ -1,4 +1,3 @@
-// Copy of the weekStart
 var weekStart = new Date();
 weekStart.setDate(new Date().getDate() - new Date().getDay() + 1);
 weekStart.setHours(7);
@@ -192,6 +191,8 @@ class Appointments extends React.Component {
      */
     componentDidMount() {
         this.update();
+        this.setState({waiting: true});
+        setTimeout((self) => {self.setState({waiting: false})}, 500, this);
         this.interval = setInterval((self) => { self.update() }, 1000, this);
     }
 
@@ -229,13 +230,17 @@ class Appointments extends React.Component {
     }
 
     render() {
-        if (!this.state.booked && !this.state.slot && !this.state.schedule) {
-            return <AppointmentSlots slots={this.state.slots} handleClick={this.selectSlot} backHandle={() => {window.location.href="/"}}/>;
-        } else if (this.state.slot) {   // TODO: context
-            return  <BookAppointment time={this.state.slot.time} appointments={this.state.slot.appointments} handleClick={this.book} backHandle={this.resetState}/>
-        } else {
+        if (this.state.waiting) {
+            return <div><h2>Loading</h2><div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>
+        } else if (this.state.schedule){
             return <AppointmentSchedule schedule={this.state.schedule} handleClick={console.log} backHandle={() => {window.location.href="/"}}/>
-        }
+        } else if (this.state.slot) {   
+            return <BookAppointment time={this.state.slot.time} appointments={this.state.slot.appointments} handleClick={this.book} backHandle={this.resetState}/>
+        } else {
+            return <AppointmentSlots slots={this.state.slots} handleClick={this.selectSlot} backHandle={() => {window.location.href="/"}}/>;
+        }  
     }
 }
 

@@ -1,6 +1,10 @@
 
 function Row(props) {
-    return <td class={props.className} onClick={() => { props.fn(props.obj) }}>{props.obj.text}</td>
+    return <td className={props.className} onClick={() => {
+        if (props.obj.appointments) {
+            props.fn(props.obj)
+        }
+    }}>{props.obj.text}</td>
 }
 
 function Rows(props) {
