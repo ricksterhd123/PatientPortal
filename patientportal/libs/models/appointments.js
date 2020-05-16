@@ -130,16 +130,8 @@ function getSlotsTaken() {
         return new Date(a.dateTime) < new Date(b.dateTime);
       });
 
-      // let clinicians = [];
-
-      // for (let i = 0; i < allAppointments.length; i++) {
-      //     let index = clinicians.findIndex(v => {return v.clinicianID.equals(allAppointments[i].clinicianID)});
-      //     if (index == -1) {
-      //         index = clinicians.push({clinicianID: allAppointments[i].clinicianID, appointments: []}) - 1;
-      //     }
-      //     clinicians[index].appointments.push({dateTime: allAppointments[i].dateTime, duration: allAppointments[i].duration});
-      // }
-
+      // Don't show patient ID
+      allAppointments = allAppointments.map(a => {return {_id: a._id, clinicianID: a.clinicianID, dateTime: a.dateTime, duration: a.duration}});
       resolve(allAppointments);
     } catch (e) {
       reject(e);
@@ -188,6 +180,7 @@ function getClinicianSchedule(userID) {
     }
   });
 }
+
 module.exports = {
   create,
   update,
