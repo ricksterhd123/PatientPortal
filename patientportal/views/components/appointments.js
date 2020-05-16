@@ -140,8 +140,8 @@ class Appointments extends React.Component {
      * <AppointmentSlots/> for when the user needs to book an appointment slot.
      */
     async getAvailableSlots() {
-        this.state.slots = emptySlots();
         try {
+            this.setState({slots: emptySlots()});
             let response = await HttpRequest("GET", "/api/appointments/slots");
             response = JSON.parse(response);
 

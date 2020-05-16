@@ -51,7 +51,7 @@ class BookAppointment extends React.Component {
                     {this.state.selected ? this.state.selected.username : "Select an available clinician"}
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {this.state.clinicians.map(clinic => <a className="dropdown-item" onClick={() => {this.clinicSelect(clinic)}}>{clinic.username}</a>)}
+                    {this.state.clinicians.map(clinic => <a key={clinic._id} className="dropdown-item" onClick={() => {this.clinicSelect(clinic)}}>{clinic.username}</a>)}
                 </div>
             </div>
 

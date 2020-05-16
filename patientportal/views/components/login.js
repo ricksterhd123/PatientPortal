@@ -32,7 +32,7 @@ class LoginPanel extends React.Component{
               if (result){
                 window.location.href = "/";
               } else {
-                self.setState({success: result && true || false, error: error});
+                self.setState({success: result, error: error});
                 // Wait 3 seconds before hiding the warning message
                 setTimeout(self => {
                   self.setState({success: true, error: null});

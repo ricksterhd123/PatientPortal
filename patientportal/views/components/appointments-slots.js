@@ -56,7 +56,7 @@ class AppointmentSlots extends React.Component {
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        {days.map(d => <th scope="col">{d}</th>)}
+                        {days.map(d => <th key={d} scope="col">{d}</th>)}
                     </tr>
                 </thead>
                 <tbody>

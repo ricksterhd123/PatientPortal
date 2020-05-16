@@ -24,7 +24,7 @@ function create(clinicianID, patientID, dateTime) {
                 // Check if the appointment is already booked.
                 let valid = true;
                 let appointments = await collection.find({clinicianID: clinicianID}).toArray();
-                appointments.sort( (a, b) => { return new Date(a.dateTime) < Date(b.dateTime) });
+                appointments.sort( (a, b) => { return new Date(a.dateTime) < new Date(b.dateTime) });
                 for (let i = 0; i < appointments.length; i++) {
                     let offset = Math.floor(((new Date(appointments[i].dateTime) - dateTime) / 1000 / 60));
                     if (offset == 0 || offset % 15 != 0) {
