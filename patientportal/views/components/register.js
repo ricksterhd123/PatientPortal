@@ -59,23 +59,23 @@ class RegisterPanel extends React.Component{
                     <Warning errorMsg="Please use at your own risk!"/>
                     <Warning errorMsg={this.state.error}/>
                     
-                    <div class='form-group'>
-                      <label for='input-username'>Username</label>
-                      <input id='input-username' class='form-control' type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
+                    <div className='form-group'>
+                      <label htmlFor='input-username'>Username</label>
+                      <input id='input-username' className='form-control' type="text" name="username" placeholder="Username" onChange={this.userInputHandle}></input>
                     </div>
 
-                    <div class='form-group'>
-                      <label for='input-password'>Password</label>
-                      <input id='input-password' class='form-control' type="password" name="password" onChange={this.passInputHandle}></input>
+                    <div className='form-group'>
+                      <label htmlFor='input-password'>Password</label>
+                      <input id='input-password' className='form-control' type="password" name="password" onChange={this.passInputHandle}></input>
                     </div>
                     
-                    <div class='form-group'>
-                      <label for='input-repeat-password'>Repeat password</label>
-                      <input id='input-repeat-password' class='form-control' type="password" name="repeat password" aria-describedby='login-help'></input>
-                      <small id="login-help" class="form-text text-muted"><a href="/login">Already registered?</a></small>
+                    <div className='form-group'>
+                      <label htmlFor='input-repeat-password'>Repeat password</label>
+                      <input id='input-repeat-password' className='form-control' type="password" name="repeat password" aria-describedby='login-help'></input>
+                      <small id="login-help" className="form-text text-muted"><a href="/login">Already registered?</a></small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" value="Login" onClick={this.submitHandle}>Register</button>
+                    <button type="submit" className="btn btn-primary" value="Login" onClick={this.submitHandle}>Register</button>
                 </div>
     }
 }
