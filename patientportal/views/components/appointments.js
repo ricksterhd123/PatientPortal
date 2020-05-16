@@ -112,7 +112,6 @@ class Appointments extends React.Component {
             let results = response.result;
             if (results && results.length > 0) {
                 for (let i = 0; i < schedule.length; i++) {
-                    let day = schedule[i].day;
                     let slots = schedule[i].slots;
                     for (let j = 0; j < slots.length; j++) {
                         let time = slots[j].time;
@@ -149,7 +148,6 @@ class Appointments extends React.Component {
             let appointments = response.result;
 
             for (let i = 0; i < this.state.slots.length; i++) {
-                let day = this.state.slots[i].day;
                 let slots = this.state.slots[i].slots;
                 for (let j = 0; j < slots.length; j++) {
                     let time = slots[j].time;
@@ -217,8 +215,7 @@ class Appointments extends React.Component {
      */
     async book(clinician) {
         try {
-            let response = await HttpRequest("POST", "/api/appointments/create", [], JSON.stringify({id: clinician._id, dateTime: new Date(this.state.slot.time)}));
-            response = JSON.parse(response);
+            await HttpRequest("POST", "/api/appointments/create", [], JSON.stringify({id: clinician._id, dateTime: new Date(this.state.slot.time)}));
             this.setState({ booked: true, slot: false });
         } catch (e) {
             console.error(e);

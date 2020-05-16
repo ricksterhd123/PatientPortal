@@ -8,8 +8,6 @@ function create(clinicianID, patientID, dateTime) {
   dateTime = new Date(dateTime);
   clinicianID = new ObjectId(clinicianID);
   patientID = new ObjectId(patientID);
-
-  if (clinicianID && patientID) {
     return new Promise(async function (resolve, reject) {
       try {
         let client = await mongo.client.connect(mongo.URL, mongo.options);
@@ -54,15 +52,11 @@ function create(clinicianID, patientID, dateTime) {
         reject(e);
       }
     });
-  } else {
-    return false;
-  }
 }
 
 function update(appointmentID, newDateTime) {
   appointmentID = new ObjectId(appointmentID);
   newDateTime = new Date(newDateTime);
-  if (appointmentID && newDateTime) {
     return new Promise(async function (resolve, reject) {
       try {
         let client = await mongo.client.connect(mongo.URL, mongo.options);
@@ -106,8 +100,6 @@ function update(appointmentID, newDateTime) {
         reject(e);
       }
     });
-  } else {
-    return false;
   }
 }
 
