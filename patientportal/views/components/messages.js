@@ -55,9 +55,9 @@ class Messages extends React.Component {
 
     render() {
         return <div id={this.props.id} className={this.props.className}>
-            {this.props.list.map(e => <Message text={`[${e.timeStamp}] ${e.fromUser}: ${e.message}`}/>)}
+            {this.props.list.map(e => <Message key={e._id} text={`[${e.timeStamp}] ${e.fromUser}: ${e.message}`}/>)}
             <div className="form-group">
-                <textarea class="form-control" onChange={this.handleInput} value={this.state.inputBox}></textarea>
+                <textarea className="form-control" onChange={this.handleInput} value={this.state.inputBox}></textarea>
             </div>
             <div className="container">
                 <button type="button" className="btn btn-success btn-lg" onClick={() => {this.props.sendHandle(this.state.inputBox); this.setState({inputBox: ""})}} >Send message</button>
