@@ -170,7 +170,6 @@ class Appointments extends React.Component {
             }
 
             this.setState({ slots: this.state.slots });
-            console.log(this.state.schedule);
         } catch (e) {
             console.error(e);
         }
@@ -206,7 +205,9 @@ class Appointments extends React.Component {
      * @param {object} item
      */
     selectSlot(item) {
-        this.setState({ slot: item });
+        if (item.appointments) {
+            this.setState({ slot: item });
+        }
     }
 
     /**
