@@ -34,10 +34,10 @@ class Appointments extends React.Component {
      * <AppointmentSchedule/> for when the user has already booked an appointment.
      * TODO: Make compatible with doctors but not admins.
      */
-    async getSchedule() {
+    async getSchedule(id) {
         let schedule = emptySchedule();
         try {
-            let response = await HttpRequest("GET", "/api/appointments/schedule");
+            let response = await HttpRequest("GET", `/api/appointments/schedule/${id}`);
             response = JSON.parse(response);
             let results = response.result;
             if (results && results.length > 0) {
