@@ -61,7 +61,7 @@ class AppointmentSlots extends React.Component {
                 </thead>
                 <tbody>
                     {cols.map((value) =>
-                        <Rows time={value.time} items={value.items} rowFn={this.props.handleClick} />
+                        <Rows key={value.time} time={value.time} items={value.items} rowFn={this.props.handleClick} />
                     )}
                 </tbody>
             </table>
