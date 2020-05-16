@@ -20,11 +20,11 @@ class Contacts extends React.Component {
                         <h2>Select contact</h2>
                         <div className="list-group">
                             {this.props.list.map(contact => {
-                                return <Contact className="list-group-item list-group-item-action" onClick={this.props.fn} contact={contact}/>;
+                                return <Contact key={contact.id} className="list-group-item list-group-item-action" onClick={this.props.fn} contact={contact}/>;
                             })}
                         </div>
                         <div>
-                            <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
+                            <button type="button" className="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
                         </div>
                     </div>;
     }
@@ -56,12 +56,12 @@ class Messages extends React.Component {
     render() {
         return <div id={this.props.id} className={this.props.className}>
             {this.props.list.map(e => <Message text={`[${e.timeStamp}] ${e.fromUser}: ${e.message}`}/>)}
-            <div class="form-group">
+            <div className="form-group">
                 <textarea class="form-control" onChange={this.handleInput} value={this.state.inputBox}></textarea>
             </div>
-            <div class="container">
-                <button type="button" class="btn btn-success btn-lg" onClick={() => {this.props.sendHandle(this.state.inputBox); this.setState({inputBox: ""})}} >Send message</button>
-                <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
+            <div className="container">
+                <button type="button" className="btn btn-success btn-lg" onClick={() => {this.props.sendHandle(this.state.inputBox); this.setState({inputBox: ""})}} >Send message</button>
+                <button type="button" className="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
             </div>
         </div>
     }
