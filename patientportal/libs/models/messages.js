@@ -59,10 +59,10 @@ function getMessagesFromUser(fromUser, toUser) {
                 
                 if (!fUser || !tUser) {
                     reject("Could not find user with provided id");
+                } else {
+                    messages[i].fromUser = fUser.username;
+                    messages[i].toUser = tUser.username;
                 }
-
-                messages[i].fromUser = fUser.username;
-                messages[i].toUser = tUser.username;
             }
 
             messages.sort( (a, b) => {

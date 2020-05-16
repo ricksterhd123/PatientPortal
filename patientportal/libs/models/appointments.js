@@ -68,7 +68,7 @@ function update(appointmentID, newDateTime) {
                     reject("Invalid appointment id");
                 } else {
                     let appointments = await collection.find({clinicianID: appointment[0].clinicianID}).toArray();
-                    appointments.sort( (a, b) => { return new Date(a.dateTime) < Date(b.dateTime) });
+                    appointments.sort( (a, b) => { return new Date(a.dateTime) < new Date(b.dateTime) });
                     for (let i = 0; i < appointments.length; i++) {
                         let offset = Math.floor(((new Date(appointments[i].dateTime) - newDateTime) / 1000 / 60));
                         if (offset == 0 || offset % 15 != 0) {

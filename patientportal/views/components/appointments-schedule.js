@@ -51,7 +51,7 @@ class AppointmentSchedule extends React.Component {
                     )}
                 </tbody>
             </table>
-            <button type="button" class="btn btn-primary btn-lg btn-block" onClick={this.props.backHandle}>Go back</button>
+            <button type="button" className="btn btn-primary btn-lg btn-block" onClick={this.props.backHandle}>Go back</button>
         </div>
     }
 }
