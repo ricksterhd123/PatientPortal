@@ -27,7 +27,6 @@ var noWeeks = 2;
 function emptyBookingSlots() {
     let cols = [];
     let dateTime = new Date();
-    console.log(dateTime);
     for (let week = 0; week < noWeeks; week++) {
         let weekSlots = [];
         for (let i = 0; i < days.length; i++) {
@@ -76,6 +75,7 @@ function emptyBookingSlots() {
 function emptySchedule() {
     let schedule = [];
     let dateTime = new Date();
+    //dateTime.setDate(dateTime.getDate() - new Date().getDay() + 1);
     for (let week = 0; week < noWeeks; week++) {
         let scheduleWeek = [];
         for (let i = 0; i < days.length; i++) {

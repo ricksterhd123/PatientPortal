@@ -16,7 +16,8 @@ class Appointments extends React.Component {
             schedule: false,     // Appointment schedule
             slot: false,        // Has user selected a free slot to book?
             appointment: false, // Has user selected appointment from their schedule?
-            cancelling: false   // User is cancelling
+            cancelling: false,   // User is cancelling
+            rescheduling: false  // User is rescheduling an appointment
         };
 
         // Binds
@@ -35,7 +36,6 @@ class Appointments extends React.Component {
      */
     async getSchedule() {
         let schedule = emptySchedule();
-        console.log(schedule.length);
         try {
             let response = await HttpRequest("GET", "/api/appointments/schedule");
             response = JSON.parse(response);
@@ -103,10 +103,7 @@ class Appointments extends React.Component {
                     }
                 }
             }
-
-            console.log(bookingSlots);
             this.setState({ bookingSlots: bookingSlots });
-            console.log(this.state.bookingSlots);
         } catch (e) {
             console.error(e);
         }
@@ -185,9 +182,11 @@ class Appointments extends React.Component {
             <span className="sr-only">Loading...</span>
             </div></div>;
         } else if (this.state.cancelling) {
-            return <CancelAppointment appointment={this.state.appointment} confirm={this.cancel} backHandle={() => {this.setState({cancelling: false})}}/>
+            return <CancelAppointment appointment={this.state.appointment} confirm={this.cancel} backHandle={() => {this.setState({cancelling: false})}}/>;
+        } else if (this.state.rescheduling) {
+            return <RescheduleAppointment appointment={this.state.appointment} confirm={this.reschedule} backHandle={() => {this.setState({rescheduling: false})}}/>;
         } else if (this.state.appointment) {
-            return <ManageAppointment appointment={this.state.appointment} rescheduleClick={this.reschedule} cancelClick={() => {this.setState({cancelling: true})}} backHandle={() => {this.setState({appointment: false})}} />;
+            return <ManageAppointment appointment={this.state.appointment} rescheduleClick={() => {this.setState({rescheduling: true})}} cancelClick={() => {this.setState({cancelling: true})}} backHandle={() => {this.setState({appointment: false})}} />;
         } else if (this.state.schedule){
             return <AppointmentSchedule schedule={this.state.schedule} handleClick={this.selectAppointment} backHandle={() => {window.location.href="/"}}/>;
         } else if (this.state.slot) {   

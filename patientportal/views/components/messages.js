@@ -88,7 +88,6 @@ class Menu extends React.Component {
      * @param {string} id 
      */
     handleContactSelect(contact) {
-        console.log(`Object: ${contact}`);
         this.setState({menu: false, selected: contact})
         this.getMessages();
     }

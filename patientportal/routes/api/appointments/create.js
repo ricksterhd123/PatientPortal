@@ -5,10 +5,6 @@ const Appointment = require('../../../libs/models/appointments');
 
 // assume patient is making appointment first
 router.post("/", async function (req, res) {
-    console.log(req.token);
-    console.log(req.body);
-    console.log(req.body.clinicianID);
-    console.log(req.body.dateTime)
     if (req.token && req.body.id && req.body.dateTime) {  
         let patientID = req.token.id;
         let role = req.token.role;
@@ -24,7 +20,7 @@ router.post("/", async function (req, res) {
             res.status(500).send("Not implemented");
         }
     } else {
-        console.log("Issue");
+        console.error("No token or request body");
         res.status(401).send();
     }
 });

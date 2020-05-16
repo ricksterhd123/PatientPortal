@@ -28,9 +28,6 @@ class AppointmentSlots extends React.Component {
     render() {
         let cols = [];
         let schedule = this.props.slots[this.state.week];
-        console.log(schedule);
-        // console.log(this.state.week);
-        // console.log(this.props.slots);
         if (schedule) {
             for (let i = 0; i < slotsEachDay; i++) {
                 let item = [];
