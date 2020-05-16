@@ -1,4 +1,4 @@
-# PatientPortal ![Node.js CI](https://github.com/ricksterhd123/PatientPortal/workflows/Node.js%20CI/badge.svg)
+# PatientPortal ![Node.js CI](https://github.com/ricksterhd123/PatientPortal/workflows/Node.js%20CI/badge.svg) [![DeepScan grade](https://deepscan.io/api/teams/9227/projects/11524/branches/172550/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee)](https://deepscan.io/dashboard#view=project&tid=9227&pid=11524&bid=172550)
 
 A cross platform patient portal for UK-based general practitioners
 
