@@ -231,8 +231,8 @@ class Appointments extends React.Component {
 
     render() {
         if (this.state.waiting) {
-            return <div><h2>Loading</h2><div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
+            return <div><h2>Loading</h2><div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
             </div></div>
         } else if (this.state.schedule){
             return <AppointmentSchedule schedule={this.state.schedule} handleClick={console.log} backHandle={() => {window.location.href="/"}}/>
