@@ -1,5 +1,4 @@
 const mongo = require('./mongo');
-const assert = require('assert');
 const ObjectId = require('mongodb').ObjectId;
 const dbName = "PatientPortal";
 const collectionName = "Users";
