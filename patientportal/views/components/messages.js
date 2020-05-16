@@ -142,7 +142,7 @@ class Menu extends React.Component {
     async sendMessage(message) {
         if (this.state.selected) {
             try {
-                let response = await HttpRequest("POST", `/api/messages/send/${this.state.selected.id}`, [], JSON.stringify({timeStamp: new Date().toISOString(), message: message}));
+                await HttpRequest("POST", `/api/messages/send/${this.state.selected.id}`, [], JSON.stringify({timeStamp: new Date().toISOString(), message: message}));
                 this.getMessages();
             } catch (e) {
                 console.error(e);
