@@ -6,7 +6,6 @@ router.post("/:userID", async function (req, res) {
     if (req.token && req.body.timeStamp && req.body.message) {
         try {
             let id = req.token.id;
-            let role = req.token.role;
             let success = await Message.sendMessage(id, req.params.userID, req.body.timeStamp, req.body.message);
             res.json({result: success});
         } catch (e) {
