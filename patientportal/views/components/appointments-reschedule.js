@@ -1,86 +1,106 @@
-class CancelAppointment extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    render() {
-        return <div>
-        <h2>Sure you want to cancel the appointment?</h2>
-        <button type="button" className="btn btn-primary btn-lg" onClick={() => {this.props.confirm(this.props.appointment)}}>Yes</button>
-        <button type="button" className="btn btn-primary btn-lg" onClick={() => {this.props.backHandle(this.props.appointment)}}>Cancel</button>
-        </div>;
-    }
-}
-
 class RescheduleAppointment extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {week: 0};
-        this.pagination = this.pagination.bind(this);
-        this.columnHeader = this.columnHeader.bind(this);
-    }
+	constructor(props) {
+		super(props);
+		this.state = {
+			week: 0,
+			selected: false,
+		};
+		this.select = this.select.bind(this);
+		this.pagination = this.pagination.bind(this);
+		this.columnHeader = this.columnHeader.bind(this);
+	}
 
-    pagination() {
-        let list = [];
-        for (let i = 0; i < noWeeks; i++) {
-            list.push(<li className={`page-item ${this.state.week == i ? "active" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: i})}}>{i+1}</a></li>);
-        }
-        return list;
-    }
+	pagination() {
+		let list = [];
+		for (let i = 0; i < noWeeks; i++) {
+			list.push(
+				<li className={`page-item ${this.state.week == i ? "active" : ""}`}>
+					<a className="page-link" onClick={() => {this.setState({week: i,});}}>{i + 1}</a>
+				</li>
+			);
+		}
+		return list;
+	}
 
-    columnHeader() {
-        let list = [];
-        let schedule = this.props.schedule[this.state.week];
-        if (schedule) {
-            for (let i = 0; i < schedule.length; i++) {
-                list.push(<th key={schedule[i].day} scope="col">{schedule[i].day}</th>);
-            }
-        }
-        return list;
-    }
+	columnHeader() {
+		let list = [];
+		let schedule = this.props.schedule[this.state.week];
+		if (schedule) {
+			for (let i = 0; i < schedule.length; i++) {
+				list.push(
+					<th key={schedule[i].day} scope="col">
+						{schedule[i].day}
+					</th>
+				);
+			}
+		}
+		return list;
+	}
 
-    render() {
-        let cols = [];
-        let schedule = this.props.schedule[this.state.week];
-        if (schedule) {
-            for (let i = 0; i < slotsEachDay; i++) {
-                let time = false;
-                let item = []
-                for (let j = 0; j < daysEachWeek; j++) {
-                    let slot = schedule[j].slots[i];
-                    //cols[index].rows = [];
-                    time = slot.time;
-                    item.push({time: time, text: slot.appointment ? "Booked" : "", class: slot.appointment ? "table-danger" : "", appointment: slot.appointment});
-                }
-                cols.push({time: time, items: item})
-            }
-        }
+	select(slot) {
+		this.setState({
+			selected: slot,
+		});
+	}
 
-        return <div>
-            <h2>Schedule</h2>
-            <nav aria-label="Page navigation example">
-                <ul className="pagination">
-                    <li className={`page-item ${this.state.week <= 0 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week-1)%noWeeks})}}>Previous</a></li>
-                    {this.pagination()}
-                    <li className={`page-item ${this.state.week >= noWeeks - 1 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week+1)%noWeeks})}}>Next</a></li>
-                </ul>
-            </nav>
+	render() {
+		let cols = [];
+		let schedule = this.props.schedule[this.state.week];
+		if (schedule) {
+			for (let i = 0; i < slotsEachDay; i++) {
+				let time = false;
+				let item = [];
+				for (let j = 0; j < daysEachWeek; j++) {
+					let slot = schedule[j].slots[i];
+					//cols[index].rows = [];
+					time = slot.time;
+					item.push({
+						time: time,
+						text: slot.appointment ? "Booked" : "",
+						class: slot.appointment ? "table-danger" : "",
+						appointment: slot.appointment,
+					});
+				}
+				cols.push({
+					time: time,
+					items: item,
+				});
+			}
+		}
 
-            <table className="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        {this.columnHeader()}
-                    </tr>
-                </thead>
-                <tbody>
-                    {cols.map((value) =>
-                        <Rows key={value.time} time={value.time} items={value.items} rowFn={this.props.handleClick} />
-                    )}
-                </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block" onClick={this.props.backHandle}>Go back</button>
-        </div>
-    }
+		if (this.state.selected) {
+			return (
+				<div>
+					<h2> Sure you want to cancel the appointment ? </h2>
+					<button type="button" className="btn btn-primary btn-lg" onClick={() => {this.props.confirm(this.state.selected);}}>Yes</button>
+					<button type="button" className="btn btn-primary btn-lg" onClick={this.props.backHandle}>Cancel</button>
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<h2> Schedule </h2>
+					<nav aria-label="Page navigation example">
+						<ul className="pagination">
+							<li className={`page-item ${this.state.week <= 0 ? "disabled" : ""}`}><a className="page-link" onClick={() => {this.setState({week: (this.state.week - 1) % noWeeks})}}>Previous</a></li>
+              {this.pagination()}
+							<li className={`page-item ${this.state.week >= noWeeks - 1 ? "disabled" : ""}`}><a className="page-link" onClick={() => {this.setState({week: (this.state.week + 1) % noWeeks})}}>Next</a></li>
+						</ul>
+					</nav>
+
+					<table className="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col"> # </th> {this.columnHeader()}
+							</tr>
+						</thead>
+						<tbody>
+							{cols.map(value => (<Rows key={value.time} time={value.time} items={value.items} rowFn={this.select}/>))}
+						</tbody>
+					</table>
+					<button type="button" className="btn btn-primary btn-lg btn-block" onClick={this.props.backHandle}>Go back</button>
+				</div>
+			);
+		}
+	}
 }
