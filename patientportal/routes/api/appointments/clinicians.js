@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Roles = require('../../../libs/roles');
 const User = require('../../../libs/models/user');
-const Appointment = require('../../../libs/models/appointments');
 
 // assume patient is making appointment first
 router.get("/", async function (req, res) {

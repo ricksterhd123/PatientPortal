@@ -1,8 +1,6 @@
 const mongo = require('./mongo');
 const ObjectId = require('mongodb').ObjectId;
-const assert = require('assert');
 const User = require('./user');
-const Roles = require('../roles');
 const dbName = "PatientPortal";
 const collectionName = "Messages";
 
@@ -168,8 +166,8 @@ function getNumberOfMessages() {
     });
 }
 
-function updateMessage(user) {} // => bool
+// function updateMessage(user) {} // => bool
 
-function deleteMessage(user) {} // => bool
+// function deleteMessage(user) {} // => bool
 
 module.exports = {sendMessage, getMessagesFromUser, getContacts, getNumberOfMessages};

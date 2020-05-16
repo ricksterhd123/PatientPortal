@@ -114,9 +114,9 @@ function getNumberOfUsers() {
     });
 } // => number
 
-function updateUser(user) {} // => bool
+// function updateUser(user) {} // => bool
 
-function deleteUser(user) {} // => bool
+// function deleteUser(user) {} // => bool
 
 module.exports = {
     getAllUsers,
