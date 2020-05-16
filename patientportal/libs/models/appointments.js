@@ -100,7 +100,6 @@ function update(appointmentID, newDateTime) {
         reject(e);
       }
     });
-  }
 }
 
 function cancel(appointmentID) {
