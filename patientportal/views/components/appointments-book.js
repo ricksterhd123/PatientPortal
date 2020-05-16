@@ -47,11 +47,11 @@ class BookAppointment extends React.Component {
     render() {
         return <div>
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {this.state.selected ? this.state.selected.username : "Select an available clinician"}
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {this.state.clinicians.map(clinic => <a class="dropdown-item" onClick={() => {this.clinicSelect(clinic)}}>{clinic.username}</a>)}
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {this.state.clinicians.map(clinic => <a className="dropdown-item" onClick={() => {this.clinicSelect(clinic)}}>{clinic.username}</a>)}
                 </div>
             </div>
 
@@ -59,8 +59,8 @@ class BookAppointment extends React.Component {
             <p>Time: {new Date(this.props.time).toTimeString()}</p>
             <p>Date: {new Date(this.props.time).toDateString()}</p>
             <p>Duration: 15 minutes</p>
-            <button type="button" class="btn btn-primary btn-lg" onClick={() => {this.props.handleClick(this.state.selected)}}>Book appointment</button>
-            <button type="button" class="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
+            <button type="button" className="btn btn-primary btn-lg" onClick={() => {this.props.handleClick(this.state.selected)}}>Book appointment</button>
+            <button type="button" className="btn btn-warning btn-lg" onClick={this.props.backHandle}>Go back</button>
         </div>
     }
 }
