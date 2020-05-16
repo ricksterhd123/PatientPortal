@@ -1,78 +1,4 @@
-var weekStart = new Date();
-weekStart.setDate(new Date().getDate() - new Date().getDay() + 1);
-weekStart.setHours(7);
-weekStart.setMinutes(0);
-weekStart.setSeconds(0);
-weekStart.setMilliseconds(0);
 
-var startTime = { hours: 7, minutes: 0, seconds: 0, milliseconds: 0 };
-var endTime = { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 };
-var appointmentDurationMins = 15;  // Minutes
-var appointmentDurationHours = appointmentDurationMins / 60;
-var dayDurationHours = endTime.hours - startTime.hours;
-var slotsEachDay = dayDurationHours / appointmentDurationHours;
-var daysEachWeek = 6; // m | t | w | t | f | s
-var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-/**
-* Get an empty schedule with 44 slots per day
-*/
-function emptySlots() {
-    let cols = [];
-    for (let i = 0; i < days.length; i++) {
-        let rows = [];
-        let hour = 7;
-        let minutes = 0;
-        let startHour = 7;
-        let startMinutes = 0;
-        for (let j = 0; j < slotsEachDay; j++) {
-            minutes = startMinutes + (j * 15) % 60;
-            if (j * 15 >= 60) {
-                hour = startHour + Math.floor((j * 15) / 60);
-            }
-            let dateTime = new Date(weekStart);
-            dateTime.setDate(dateTime.getDate() + i);
-            dateTime.setHours(hour);
-            dateTime.setMinutes(minutes);
-            dateTime.setMilliseconds(0);
-            rows.push({ time: dateTime, appointments: [], full: false });
-        }
-
-        cols.push({
-            day: days[i],
-            slots: rows
-        });
-    }
-
-    return cols;
-}
-
-function emptySchedule() {
-    let schedule = [];
-    for (let i = 0; i < days.length; i++) {
-        let slots = [];
-        let hour = 7;
-        let minutes = 0;
-        let startHour = 7;
-        let startMinutes = 0;
-
-        for (let j = 0; j < slotsEachDay; j++) {
-            minutes = startMinutes + (j * 15) % 60;
-            if (j * 15 >= 60) {
-                hour = startHour + Math.floor((j * 15) / 60);
-            }
-            let dateTime = new Date(weekStart);
-            dateTime.setDate(dateTime.getDate() + i);
-            dateTime.setHours(hour);
-            dateTime.setMinutes(minutes);
-            dateTime.setMilliseconds(0);
-            slots.push({ time: dateTime, appointment: false });
-        }
-
-        schedule.push({day: days[i], slots: slots});
-    }
-    return schedule;
-}
 
 /**
  * This class is composed of three components:
@@ -86,7 +12,7 @@ class Appointments extends React.Component {
 
         // initial state
         this.state = { 
-            slots: emptySlots(), // Slots
+            bookingSlots: false, // Slots
             schedule: false,     // Appointment schedule
             slot: false,        // Has user selected a free slot to book?
             appointment: false, // Has user selected appointment from their schedule?
@@ -109,22 +35,25 @@ class Appointments extends React.Component {
      */
     async getSchedule() {
         let schedule = emptySchedule();
+        console.log(schedule.length);
         try {
             let response = await HttpRequest("GET", "/api/appointments/schedule");
             response = JSON.parse(response);
             let results = response.result;
             if (results && results.length > 0) {
-                for (let i = 0; i < schedule.length; i++) {
-                    let slots = schedule[i].slots;
-                    for (let j = 0; j < slots.length; j++) {
-                        let time = slots[j].time;
+                for (let week = 0; week < schedule.length; week++) {
+                    for (let day = 0; day < schedule[week].length; day++) {
+                        let slots = schedule[week][day].slots;
+                        for (let slot = 0; slot < slots.length; slot++) {
+                            let time = slots[slot].time;
 
-                        let index = response.result.findIndex((appointment) => {
-                            return new Date(appointment.dateTime) - time == 0;
-                        });
+                            let index = results.findIndex((appointment) => {
+                                return new Date(appointment.dateTime) - time == 0;
+                            });
 
-                        if (index != -1){
-                            slots[j].appointment = results[index];
+                            if (index != -1){
+                                slots[slot].appointment = results[index];
+                            }
                         }
                     }
                 }
@@ -145,36 +74,39 @@ class Appointments extends React.Component {
      */
     async getAvailableSlots() {
         try {
-            this.setState({slots: emptySlots()});
+            let bookingSlots = emptyBookingSlots();
             let response = await HttpRequest("GET", "/api/appointments/slots");
             response = JSON.parse(response);
-
             let noClinicians = response.clinicians;
             let appointments = response.result;
 
-            for (let i = 0; i < this.state.slots.length; i++) {
-                let slots = this.state.slots[i].slots;
-                for (let j = 0; j < slots.length; j++) {
-                    let time = slots[j].time;
+            for (let week = 0; week < bookingSlots.length; week++) {
+                for (let i = 0; i < bookingSlots[week].length; i++) {
+                    let slots = bookingSlots[week][i].slots;
+                    for (let j = 0; j < slots.length; j++) {
+                        let time = slots[j].time;
 
-                    // Find first index
-                    let index = appointments.findIndex((appointment) => {
-                        return (new Date(appointment.dateTime) - new Date(time)) == 0;
-                    });
-
-                    // Find others
-                    while (index != -1) {
-                        slots[j].appointments.push(appointments[index]);
-                        appointments.splice(index, 1);
-                        slots[j].full = slots[j].appointments.length == noClinicians;
-                        index = appointments.findIndex((appointment) => {
+                        // Find first index
+                        let index = appointments.findIndex((appointment) => {
                             return (new Date(appointment.dateTime) - new Date(time)) == 0;
                         });
+
+                        // Find others
+                        while (index != -1) {
+                            slots[j].appointments.push(appointments[index]);
+                            appointments.splice(index, 1);
+                            slots[j].full = slots[j].appointments.length == noClinicians;
+                            index = appointments.findIndex((appointment) => {
+                                return (new Date(appointment.dateTime) - new Date(time)) == 0;
+                            });
+                        }
                     }
                 }
             }
 
-            this.setState({ slots: this.state.slots });
+            console.log(bookingSlots);
+            this.setState({ bookingSlots: bookingSlots });
+            console.log(this.state.bookingSlots);
         } catch (e) {
             console.error(e);
         }
@@ -261,7 +193,7 @@ class Appointments extends React.Component {
         } else if (this.state.slot) {   
             return <BookAppointment time={this.state.slot.time} appointments={this.state.slot.appointments} handleClick={this.book} backHandle={()=>{this.setState({slot: false})}}/>;
         } else {
-            return <AppointmentSlots slots={this.state.slots} handleClick={this.selectSlot} backHandle={() => {window.location.href="/"}}/>;
+            return <AppointmentSlots slots={this.state.bookingSlots} handleClick={this.selectSlot} backHandle={() => {window.location.href="/"}}/>;
         }
     }  
 }

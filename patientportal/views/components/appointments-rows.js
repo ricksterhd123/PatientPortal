@@ -1,4 +1,3 @@
-
 function Row(props) {
     return <td className={props.className} onClick={() => {
         props.fn(props.obj)

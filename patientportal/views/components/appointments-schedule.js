@@ -1,27 +1,33 @@
-var weekStart = new Date();
-weekStart.setDate(new Date().getDate() - new Date().getDay() + 1);
-weekStart.setHours(7);
-weekStart.setMinutes(0);
-weekStart.setSeconds(0);
-weekStart.setMilliseconds(0);
-
-var startTime = { hours: 7, minutes: 0, seconds: 0, milliseconds: 0 };
-var endTime = { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 };
-var appointmentDurationMins = 15;  // Minutes
-var appointmentDurationHours = appointmentDurationMins / 60;
-var dayDurationHours = endTime.hours - startTime.hours;
-var slotsEachDay = dayDurationHours / appointmentDurationHours;
-var daysEachWeek = 6; // m | t | w | t | f | s
-var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
 class AppointmentSchedule extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {week: 0};
+        this.pagination = this.pagination.bind(this);
+        this.columnHeader = this.columnHeader.bind(this);
+    }
+
+    pagination() {
+        let list = [];
+        for (let i = 0; i < noWeeks; i++) {
+            list.push(<li className={`page-item ${this.state.week == i ? "active" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: i})}}>{i+1}</a></li>);
+        }
+        return list;
+    }
+
+    columnHeader() {
+        let list = [];
+        let schedule = this.props.schedule[this.state.week];
+        if (schedule) {
+            for (let i = 0; i < schedule.length; i++) {
+                list.push(<th key={schedule[i].day} scope="col">{schedule[i].day}</th>);
+            }
+        }
+        return list;
     }
 
     render() {
         let cols = [];
-        let schedule = this.props.schedule;
+        let schedule = this.props.schedule[this.state.week];
         if (schedule) {
             for (let i = 0; i < slotsEachDay; i++) {
                 let time = false;
@@ -38,11 +44,19 @@ class AppointmentSchedule extends React.Component {
 
         return <div>
             <h2>Schedule</h2>
+            <nav aria-label="Page navigation example">
+                <ul className="pagination">
+                    <li className={`page-item ${this.state.week <= 0 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week-1)%noWeeks})}}>Previous</a></li>
+                    {this.pagination()}
+                    <li className={`page-item ${this.state.week >= noWeeks - 1 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week+1)%noWeeks})}}>Next</a></li>
+                </ul>
+            </nav>
+
             <table className="table table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        {days.map(d => <th key={d} scope="col">{d}</th>)}
+                        {this.columnHeader()}
                     </tr>
                 </thead>
                 <tbody>
