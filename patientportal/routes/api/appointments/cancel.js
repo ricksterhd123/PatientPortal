@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const Roles = require('../../../libs/roles');
 const Appointment = require('../../../libs/models/appointments');
 
 // assume patient is making appointment first

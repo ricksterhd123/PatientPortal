@@ -46,9 +46,9 @@ class AppointmentSchedule extends React.Component {
             <h2>Schedule</h2>
             <nav aria-label="Page navigation example">
                 <ul className="pagination">
-                    <li className={`page-item ${this.state.week <= 0 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week-1)%noWeeks})}}>Previous</a></li>
+                    <li className={`page-item ${this.state.week <= 0 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week-1)%noWeeks}).bind(this)}}>Previous</a></li>
                     {this.pagination()}
-                    <li className={`page-item ${this.state.week >= noWeeks - 1 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week+1)%noWeeks})}}>Next</a></li>
+                    <li className={`page-item ${this.state.week >= noWeeks - 1 ? "disabled" : ""}`}><a className="page-link" onClick={()=>{this.setState({week: (this.state.week+1)%noWeeks}).bind(this)}}>Next</a></li>
                 </ul>
             </nav>
 
