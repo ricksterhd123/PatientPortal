@@ -65,10 +65,8 @@ app.use("/api/appointments/clinicians", api.appointments.clinicians); // get all
 // Settings
 app.use("/api/settings/get", api.settings.get);
 app.use("/api/settings/password", api.settings.password);
-// Settings
-
-// Admin controls
-
+// Admin settings
+app.use("/api/admin/users", api.admin.users)
 // VIEWS
 
 app.use('/', views.index);
@@ -78,5 +76,6 @@ app.use('/appointments', views.appointments);
 app.use('/messages', views.messages);
 app.use('/symptoms', views.symptoms);
 app.use('/settings', views.settings);
+app.use('/admin', views.admin);
 
 module.exports = app;

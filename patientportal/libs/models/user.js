@@ -124,6 +124,17 @@ function changePassword(id, newPassword) {
     });
 }
 
+function changeRole(id, role) {
+    id = new ObjectId(id);
+    return new Promise(async function (resolve, reject) {
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
+        let db = client.db(dbName);
+        let collection = db.collection(collectionName);
+        let docs = await collection.findOneAndUpdate({_id: id}, {$set: {options: {role: role}}}).catch(reject);
+        resolve(docs);
+    });
+}
+
 // function updateUser(user) {} // => bool
 
 // function deleteUser(user) {} // => bool
@@ -134,5 +145,6 @@ module.exports = {
     getUser,
     getUserFromID,
     getNumberOfUsers,
-    changePassword
+    changePassword,
+    changeRole
 };

@@ -18,6 +18,8 @@ api.settings.get = require('./api/settings/get');
 api.settings.password = require('./api/settings/password');
 // get all available clinicians
 api.appointments.clinicians = require('./api/appointments/clinicians');
+api.admin = {};
+api.admin.users = require('./api/admin/users');
 
 let views = {};
 views.index = require('./views/home');
@@ -27,4 +29,5 @@ views.appointments = require('./views/appointments');
 views.messages = require('./views/messages');
 views.symptoms = require('./views/symptoms');
 views.settings = require('./views/settings');
+views.admin = require('./views/admin');
 module.exports = {api, views};

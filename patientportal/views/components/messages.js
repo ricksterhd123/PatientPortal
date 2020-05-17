@@ -55,7 +55,7 @@ class Messages extends React.Component {
 
     render() {
         return <div id={this.props.id} className={this.props.className}>
-            {this.props.list.map(e => <Message key={e._id} text={`[${e.timeStamp}] ${e.fromUser}: ${e.message}`}/>)}
+            {this.props.list.map(e => <Message key={e.timeStamp} text={`[${new Date(e.timeStamp).toISOString()}] ${e.fromUser}: ${e.message}`}/>)}
             <div className="form-group">
                 <textarea className="form-control" onChange={this.handleInput} value={this.state.inputBox}></textarea>
             </div>
@@ -129,7 +129,12 @@ class Menu extends React.Component {
                 let response = await HttpRequest("GET", `/api/messages/from/${this.state.selected.id}`);
                 response = JSON.parse(response);
                 let messages = response.result;
+                console.log(messages);
                 if (messages && messages.length > 0) {
+                    messages.sort( (a, b) => {
+                        return new Date(a.timeStamp) > new Date(b.timeStamp);
+                    });
+
                     this.setState({messages: messages});
                 }
             } catch (e) {
@@ -141,7 +146,7 @@ class Menu extends React.Component {
     async sendMessage(message) {
         if (this.state.selected) {
             try {
-                await HttpRequest("POST", `/api/messages/send/${this.state.selected.id}`, [], JSON.stringify({timeStamp: new Date().toISOString(), message: message}));
+                await HttpRequest("POST", `/api/messages/send/${this.state.selected.id}`, [], JSON.stringify({timeStamp: new Date(), message: message}));
                 this.getMessages();
             } catch (e) {
                 console.error(e);

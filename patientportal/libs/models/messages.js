@@ -66,7 +66,7 @@ function getMessagesFromUser(fromUser, toUser) {
             messages.sort( (a, b) => {
                 let aDate = new Date(a.timeStamp);
                 let bDate = new Date(b.timeStamp);
-                return aDate < bDate;
+                return aDate > bDate;
             });
 
             resolve(messages);
