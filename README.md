@@ -65,7 +65,7 @@ https://ricksterhd123.studio
 
 #### Accounts
 
-Here are some user accounts
+Here are some of the user accounts available within the demo
 
 ##### Patient:
 
