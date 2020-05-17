@@ -69,10 +69,19 @@ Here are some user accounts
 
 ##### Patient:
 
-- username: user, password: test123
+```
+username: user
+password: test123
+```
 ##### Clinician
 
-- username: doctor, password: test123
+```
+username: doctor
+password: test123
+```
 ##### Admin:
 
-- username: admin, password: test123
+```
+username: admin
+password: test123
+```
