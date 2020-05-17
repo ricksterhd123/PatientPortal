@@ -48,7 +48,7 @@ class ManageUsers extends React.Component {
 
   render() {
     return <div>
-      {this.state.users.map(u => <div>
+      {this.state.users.map(u => <div key={u._id}>
         <p>ID: {u._id}</p>
         <p>Username: {u.username}</p>
         <p>Role: </p> 
@@ -57,7 +57,7 @@ class ManageUsers extends React.Component {
           Role: {u.options.role}
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {Roles.map(r => <a className="dropdown-item" onClick={()=>{this.updateUserRole.bind()(u, r)}}>{r}</a>)}
+            {Roles.map(r => <a key={u._id.toString()+r}className="dropdown-item" onClick={()=>{this.updateUserRole.bind()(u, r)}}>{r}</a>)}
           </div>
         </div>
       </div>)}
