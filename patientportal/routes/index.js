@@ -14,6 +14,7 @@ api.appointments.slots = require('./api/appointments/slots');
 api.appointments.schedule = require('./api/appointments/schedule');
 api.appointments.update = require('./api/appointments/update');
 api.settings = {};
+api.settings.get = require('./api/settings/get');
 api.settings.password = require('./api/settings/password');
 // get all available clinicians
 api.appointments.clinicians = require('./api/appointments/clinicians');

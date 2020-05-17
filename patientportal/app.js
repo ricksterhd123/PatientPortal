@@ -63,6 +63,7 @@ app.use("/api/appointments/slots", api.appointments.slots);
 app.use("/api/appointments/schedule", api.appointments.schedule);
 app.use("/api/appointments/clinicians", api.appointments.clinicians); // get all clinicians
 // Settings
+app.use("/api/settings/get", api.settings.get);
 app.use("/api/settings/password", api.settings.password);
 // Settings
 

@@ -1,7 +1,7 @@
 class Settings extends React.Component {
   constructor(props){
     super(props);
-    this.state = {message: false, password: false, newPassword: false, repeatPassword: false, class: false};
+    this.state = {user: false, message: false, password: false, newPassword: false, repeatPassword: false, class: false};
     this.onCurrentPasswordChange = this.onCurrentPasswordChange.bind(this);
     this.onNewPasswordChange = this.onNewPasswordChange.bind(this);
     this.onRepeatPasswordChange = this.onRepeatPasswordChange.bind(this);
@@ -50,17 +50,37 @@ class Settings extends React.Component {
   onRepeatPasswordChange(event) {
     this.setState({repeatPassword: event.target.value});
   }
+
+  async update() {
+    try {
+      let response = await HttpRequest("GET", "/api/settings/get");
+      response = JSON.parse(response);
+      let user = response.result;
+      this.setState({user: user});
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  /**
+  * Run this code when the component has been mounted to DOM.
+  */
+  componentDidMount() {
+    this.update();
+    this.interval = setInterval((self) => { self.update() }, 1000, this);
+  }
+
+  /**
+   * Run this code when the component is unmounted from DOM.
+   */
+  componentWillUnmount() {
+      clearInterval(this.interval);
+  }
+
   render() {
     return <div>
-      <h2>Account</h2>
-      <h3>Details</h3>
-      <h4>Username:</h4>
-      <h4>First name:</h4>
-      <h4>Surname:</h4>
-      <h4>Date of birth:</h4>
-      <h4>Email address:</h4>
-      <h4>Phone number:</h4>
-      <h3>Authentication</h3>
+      <h2>User account</h2>
+      {this.state.user?<h3>Username: {this.state.user.username}</h3>:""}
+      <h3>Password:</h3>
       <form>
       {this.state.message ? <div className={this.state.class ? this.state.class : ""} role="alert">{this.state.message}</div> : ""}
 
