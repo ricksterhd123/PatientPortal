@@ -11,12 +11,8 @@ const Appointment = require('../../../libs/models/appointments');
 router.post("/", async function (req, res) {
     if (req.token && req.body.appointmentID) {
         try {
-            if (req.token.role == Roles.USER) {
-                let result = await Appointment.cancel(req.body.appointmentID);
-                res.json({result: result});
-            } else {
-                res.status(500).send("Not implemented");
-            }
+            let result = await Appointment.cancel(req.body.appointmentID);
+            res.json({result: result});
         } catch (e) {
             res.status(500).send();
             console.error(e);

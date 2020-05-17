@@ -131,7 +131,7 @@ function getSlotsTaken() {
       });
 
       // Don't show patient ID
-      allAppointments = allAppointments.map(a => {return {_id: a._id, clinicianID: a.clinicianID, dateTime: a.dateTime, duration: a.duration}});
+      allAppointments = allAppointments.map(a => {return {clinicianID: a.clinicianID, dateTime: a.dateTime, duration: a.duration}});
       resolve(allAppointments);
     } catch (e) {
       reject(e);

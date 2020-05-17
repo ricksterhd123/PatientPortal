@@ -12,18 +12,14 @@ const User = require('../../../libs/models/user');
 router.get("/", async function (req, res) {
     if (req.token) {
         try {
-            if (req.token.role == Roles.USER) {
-                let appointments = await Appointment.getSlotsTaken();
-                let users = await User.getAllUsers();
-                users = users.filter((x) => {return x.options.role == Roles.DOCTOR});
-                if (!users) {
-                    res.status(500).send();
-                    console.trace("No clinicians found");
-                } else {
-                    res.json({result: appointments, clinicians: users.length});
-                }
+            let appointments = await Appointment.getSlotsTaken();
+            let users = await User.getAllUsers();
+            users = users.filter((x) => {return x.options.role == Roles.DOCTOR});
+            if (!users) {
+                res.status(500).send();
+                console.trace("No clinicians found");
             } else {
-                res.status(500).send("Not implemented");
+                res.json({result: appointments, clinicians: users.length});
             }
         } catch (e) {
             res.status(500).send();

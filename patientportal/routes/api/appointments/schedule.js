@@ -22,24 +22,12 @@ router.get("/", async function (req, res) {
 			} else {
 				let user = await User.getUserFromID(req.body.id);
 				if (user) {
-					if (user.role == Roles.DOCTOR) {
-						schedule = await Appointment.getClinicianSchedule(req.body.id);
-						schedule = schedule.map((a) => {
-							return {
-								_id: a._id,
-								clinicianID: a.clinicianID,
-								dateTime: a.dateTime,
-								duration: a.duration,
-							};
-						});
-					} else {
-						throw "Not implemented";
-					}
+					schedule = await Appointment.getClinicianSchedule(req.body.id);
+					schedule = schedule.map((a) => {return {_id: a._id, clinicianID: a.clinicianID, dateTime: a.dateTime, duration: a.duration};});
 				}
 			}
-			res.json({
-				result: schedule
-			});
+
+			res.json({result: schedule});
 		} catch (e) {
 			console.error(e);
 			res.status(500).send();
