@@ -8,7 +8,7 @@ Patients at Nuffield healthcare center do not have online access to book, cancel
 
 ## Aims and objectives
 
-The software development of a web-based patient portal available to registered patients. The main objectives of this software is to provide the patient with the ability to book, reschedule or cancel appointments, view and order prescriptions, check the history of past diagnosis and any treatment received, be reminded to attend appointments via email or notifications and ask their GP's simple questions about their health. The software system will also provide clinicians an online platform to help their patients directly by answering the questions they ask, and having a schedule of booked appointments with the ability to report absences and reschedule patient’s around if they are unavailable. Administrators will be able to register clinicians, delete patients, clinicians, and delete patient data and or clinician data when requested directly.
+The software development of a web-based patient portal is available only to registered patients. The main objectives of this software is to provide the patient with the ability to book, reschedule or cancel appointments and communicate with their health providers. Enabling clinicians to use the online platform to communicate directly with their patients with text messaging (within the system) and allowing them to view, reschedule or cancel their appointments. Basic administrator functionality, e.g, changing user roles. Simple user account management, e.g. changing password. Containerised, cross platform, noSQL, MERN stack. 
 
 ## Design choices
 
@@ -28,9 +28,13 @@ The software development of a web-based patient portal available to registered p
 
 - Docker-compose version 1.25.4+
 
-## How to run
+## Notes
 
-If you want automated updates from github then use install script otherwise use docker-compose manually.
+Warning: Do not deploy before setting up.
+
+## Installation
+
+The installation script automatically installs the patient portal within a docker container and sets up a cronjob that pulls from github and updates the container.
 
 ### Run manually
 
@@ -45,8 +49,11 @@ chmod +x install.sh
 ./install.sh
 ```
 
+### Post-install setup
+
+The first user registered becomes admin. Before deploying, register at least one user account and ensure that the password is not generic and is never used more than once.
+
 ### Run in visual studio code
 
 Note: must add 'C:\Program Files\Git\bin' to Path before 'C:\Windows\System32'.
-
 Run the launch.json file.
