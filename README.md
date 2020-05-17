@@ -57,3 +57,22 @@ The first user registered becomes admin. Before deploying, register at least one
 
 Note: must add 'C:\Program Files\Git\bin' to Path before 'C:\Windows\System32'.
 Run the launch.json file.
+
+### Try the demo
+
+Please use at your own risk and do not use the same passwords twice!
+https://ricksterhd123.studio
+
+#### Accounts
+
+Here are some user accounts
+
+##### Patient:
+
+- username: user, password: test123
+##### Clinician
+
+- username: doctor, password: test123
+##### Admin:
+
+- username: admin, password: test123
