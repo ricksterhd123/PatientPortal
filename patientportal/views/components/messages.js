@@ -190,7 +190,7 @@ class Menu extends React.Component {
     render(){
         let components = this.getMainComponent();
         return <div className="container">
-                    <h1 id="page-title">Messages</h1>
+                    <h1 id="page-title" className="display-1">Messages</h1>
                     {components}
                 </div>
     }

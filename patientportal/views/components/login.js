@@ -52,7 +52,7 @@ class LoginPanel extends React.Component{
 
     render(){
         return <div>
-                    <h1>{this.props.title}</h1>
+                    <h1 id="page-title" className="display-1">{this.props.title}</h1>
                     <Warning errorMsg={this.state.error}/>
 
                     <div className='form-group'>

@@ -113,6 +113,17 @@ function getNumberOfUsers() {
     });
 } // => number
 
+function changePassword(id, newPassword) {
+    id = new ObjectId(id);
+    return new Promise(async function (resolve, reject) {
+        let client = await mongo.client.connect(mongo.URL, mongo.options).catch(reject);
+        let db = client.db(dbName);
+        let collection = db.collection(collectionName);
+        let docs = await collection.findOneAndUpdate({_id: id}, {$set: {password: newPassword}}).catch(reject);
+        resolve(docs);
+    });
+}
+
 // function updateUser(user) {} // => bool
 
 // function deleteUser(user) {} // => bool
@@ -122,5 +133,6 @@ module.exports = {
     createUser,
     getUser,
     getUserFromID,
-    getNumberOfUsers
+    getNumberOfUsers,
+    changePassword
 };

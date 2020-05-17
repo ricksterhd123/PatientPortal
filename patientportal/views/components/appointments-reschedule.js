@@ -40,7 +40,7 @@ class RescheduleAppointment extends React.Component {
 	select(slot) {
     if (!slot.appointment) {
 		  this.setState({
-		  	selected: slot,
+		  	selected: slot
       });
     }
 	}

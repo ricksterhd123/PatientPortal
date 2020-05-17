@@ -1,7 +1,7 @@
 extends layout.pug
 
 block append content
-  h1#page-title The Nuffield Centre
+  h1(class='display-1' id='page-title') The Nuffield Centre
   div#menu
   - if (role == 'admin')
     script(src='/scripts/admin.js')
@@ -9,6 +9,3 @@ block append content
     script(src='/scripts/doctor.js')
   - else
     script(src='/scripts/home.js')
-
-block append footer
-  p#user-log Logged in as #{name}

@@ -55,7 +55,7 @@ class RegisterPanel extends React.Component{
 
     render(){
         return <div>
-                    <h1>{this.props.title}</h1>
+                    <h1 id="page-title" className="display-1">{this.props.title}</h1>
                     <Warning errorMsg="Please use at your own risk!"/>
                     <Warning errorMsg={this.state.error}/>
                     
@@ -80,4 +80,4 @@ class RegisterPanel extends React.Component{
     }
 }
 
-ReactDOM.render(<RegisterPanel title="The Nuffield Center GP"/>, document.getElementById("menu"));
+ReactDOM.render(<RegisterPanel title="The Nuffield Centre GP"/>, document.getElementById("menu"));
